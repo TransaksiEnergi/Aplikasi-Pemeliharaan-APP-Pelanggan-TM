@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Isi Data Pekerjaan - Aplikasi Pemeliharaan TM</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="dashboard-header-logo-container">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Logo_PLN.svg/2560px-Logo_PLN.svg.png" alt="Logo PLN" class="header-logo">
+        </div>
+    </header>
+
+    <div class="container content">
+        <div class="add-work-card">
+            <div id="work-info-header" class="work-info-header">
+                <h2>Isi Data untuk Pekerjaan: <span id="workIdDisplay">Memuat...</span></h2>
+                <p><strong>Pelanggan:</strong> <span id="customerNameDisplay">Memuat...</span> (<span id="idpelDisplay">...</span>)</p>
+                <p><strong>Alamat:</strong> <span id="customerAddressDisplay">Memuat...</span></p>
+            </div>
+            <hr>
+
+            <div class="action-bar top-actions">
+                <a href="#" id="backToAksiLink" class="button back-button">&larr; Kembali</a>
+                <button type="submit" form="workDataForm" class="button save-button">Simpan Data</button>
+            </div>
+            <form id="workDataForm">
+                <input type="hidden" id="hiddenWorkId" name="ID_PEKERJAAN">
+                <input type="hidden" id="hiddenIdpel" name="IDPEL">
+
+                <div class="form-group"><label>Pemadaman</label><input type="text" name="Pemadaman"></div>
+                <div class="form-group"><label>Konstruksi APP</label><input type="text" name="KONSTRUKSI APP"></div>
+                <div class="form-group"><label>Arus Primer Fasa R (A)</label><input type="text" name="ARUS PRIMER FASA R (A)"></div>
+                <div class="form-group"><label>Arus Primer Fasa S (A)</label><input type="text" name="ARUS PRIMER FASA S (A)"></div>
+                <div class="form-group"><label>Arus Primer Fasa T (A)</label><input type="text" name="ARUS PRIMER FASA T (A)"></div>
+                <div class="form-group"><label>Tegangan Primer Fasa R (kV)</label><input type="text" name="TEGANGAN PRIMER FASA R (kV)"></div>
+                <div class="form-group"><label>Tegangan Primer Fasa S (kV)</label><input type="text" name="TEGANGAN PRIMER FASA S (kV)"></div>
+                <div class="form-group"><label>Tegangan Primer Fasa T (kV)</label><input type="text" name="TEGANGAN PRIMER FASA T (kV)"></div>
+                <div class="form-group"><label>Cos Phi Primer</label><input type="text" name="COS PHI PRIMER"></div>
+                <div class="form-group"><label>Arus Sekunder Fasa R (A)</label><input type="text" name="ARUS SEKUNDER FASA R (A)"></div>
+                <div class="form-group"><label>Arus Sekunder Fasa S (A)</label><input type="text" name="ARUS SEKUNDER FASA S (A)"></div>
+                <div class="form-group"><label>Arus Sekunder Fasa T (A)</label><input type="text" name="ARUS SEKUNDER FASA T (A)"></div>
+                <div class="form-group"><label>Tegangan Sekunder Fasa R (V)</label><input type="text" name="TEGANGAN SEKUNDER FASA R (V)"></div>
+                <div class="form-group"><label>Tegangan Sekunder Fasa S (V)</label><input type="text" name="TEGANGAN SEKUNDER FASA S (V)"></div>
+                <div class="form-group"><label>Tegangan Sekunder Fasa T (V)</label><input type="text" name="TEGANGAN SEKUNDER FASA T (V)"></div>
+                <div class="form-group"><label>Cos Phi Sekunder</label><input type="text" name="COS PHI SEKUNDER"></div>
+                <div class="form-group"><label>Error KWH Meter</label><input type="text" name="ERROR KWH METER"></div>
+                <div class="form-group"><label>FX CT Primer</label><input type="text" name="FX CT PRIMER"></div>
+                <div class="form-group"><label>FX CT Sekunder</label><input type="text" name="FX CT SEKUNDER"></div>
+                <div class="form-group"><label>FX PT Primer</label><input type="text" name="FX PT PRIMER"></div>
+                <div class="form-group"><label>FX PT Sekunder</label><input type="text" name="FX PT SEKUNDER"></div>
+                <div class="form-group"><label>Faktor Kali</label><input type="text" name="FAKTOR KALI"></div>
+                <div class="form-group"><label>Error CT Fasa R</label><input type="text" name="ERROR CT FASA R"></div>
+                <div class="form-group"><label>Error CT Fasa S</label><input type="text" name="ERROR CT FASA S"></div>
+                <div class="form-group"><label>Error CT Fasa T</label><input type="text" name="ERROR CT FASA T"></div>
+                <div class="form-group"><label>Rekomendasi</label><textarea name="REKOMENDASI"></textarea></div>
+                <div class="form-group"><label>Merk Kubikel</label><input type="text" name="MERK KUBIKEL"></div>
+                <div class="form-group"><label>Tipe Kubikel</label><input type="text" name="TIPE KUBIKEL"></div>
+                <div class="form-group"><label>No Seri Kubikel</label><input type="text" name="NO SERI KUBIKEL"></div>
+                <div class="form-group"><label>Tahun Kubikel</label><input type="text" name="TAHUN KUBIKEL"></div>
+                <div class="form-group"><label>Pengujian Tahanan Pentanahan</label><input type="text" name="PENGUJIAN TAHANAN PENTANAHAN"></div>
+                <div class="form-group"><label>Tahanan Isolasi CB Fasa R</label><input type="text" name="TAHANAN ISOLASI CB FASA R"></div>
+                <div class="form-group"><label>Tahanan Isolasi CB Fasa S</label><input type="text" name="TAHANAN ISOLASI CB FASA S"></div>
+                <div class="form-group"><label>Tahanan Isolasi CB Fasa T</label><input type="text" name="TAHANAN ISOLASI CB FASA T"></div>
+                <div class="form-group"><label>Tahanan Isolasi LBS Fasa R</label><input type="text" name="TAHANAN ISOLASI LBS FASA R"></div>
+                <div class="form-group"><label>Tahanan Isolasi LBS Fasa S</label><input type="text" name="TAHANAN ISOLASI LBS FASA S"></div>
+                <div class="form-group"><label>Tahanan Isolasi LBS Fasa T</label><input type="text" name="TAHANAN ISOLASI LBS FASA T"></div>
+                <div class="form-group"><label>Tahanan Isolasi Busbar Fasa R</label><input type="text" name="TAHANAN ISOLASI BUSBAR FASA R"></div>
+                <div class="form-group"><label>Tahanan Isolasi Busbar Fasa S</label><input type="text" name="TAHANAN ISOLASI BUSBAR FASA S"></div>
+                <div class="form-group"><label>Tahanan Isolasi Busbar Fasa T</label><input type="text" name="TAHANAN ISOLASI BUSBAR FASA T"></div>
+                <div class="form-group"><label>Tahanan Isolasi Busbar Fasa R-S</label><input type="text" name="TAHANAN ISOLASI BUSBAR FASA R-S"></div>
+                <div class="form-group"><label>Tahanan Isolasi Busbar Fasa R-T</label><input type="text" name="TAHANAN ISOLASI BUSBAR FASA R-T"></div>
+                <div class="form-group"><label>Tahanan Isolasi Busbar Fasa S-T</label><input type="text" name="TAHANAN ISOLASI BUSBAR FASA S-T"></div>
+                <div class="form-group"><label>CT Fasa R (Merk / Kelas / Tipe / Rasio)</label><input type="text" name="CT FASA R (MERK / KELAS / TIPE / RASIO)"></div>
+                <div class="form-group"><label>CT Fasa S (Merk / Kelas / Tipe / Rasio)</label><input type="text" name="CT FASA S (MERK / KELAS / TIPE / RASIO)"></div>
+                <div class="form-group"><label>CT Fasa T (Merk / Kelas / Tipe / Rasio)</label><input type="text" name="CT FASA T (MERK / KELAS / TIPE / RASIO)"></div>
+                <div class="form-group"><label>Merk Relay</label><input type="text" name="MERK RELAY"></div>
+                <div class="form-group"><label>Tipe Relay</label><input type="text" name="TIPE RELAY"></div>
+                <div class="form-group"><label>Rasio CT Relay</label><input type="text" name="RASIO CT RELAY"></div>
+                <div class="form-group"><label>OCR</label><input type="text" name="OCR"></div>
+                <div class="form-group"><label>TMS OCR</label><input type="text" name="TMS OCR"></div>
+                <div class="form-group"><label>OCR Instant</label><input type="text" name="OCR INSTANT"></div>
+                <div class="form-group"><label>TMS OCR Instant</label><input type="text" name="TMS OCR INSTAN"></div>
+                <div class="form-group"><label>GFR</label><input type="text" name="GFR"></div>
+                <div class="form-group"><label>TMS GFR</label><input type="text" name="TMS GRF"></div>
+                <div class="form-group"><label>GFR Instant</label><input type="text" name="GFR INSTANT"></div>
+                <div class="form-group"><label>TMS GFR Instant</label><input type="text" name="TMS GFR INSTANT"></div>
+                <div class="form-group"><label>Merk PT</label><input type="text" name="MERK PT"></div>
+                <div class="form-group"><label>Rasio PT</label><input type="text" name="RASIO PT"></div>
+                <div class="form-group"><label>Tipe PT</label><input type="text" name="TIPE PT"></div>
+                <div class="form-group"><label>Kondisi (Relay/Heater/Gardu/Gembok/Ventilasi/Exhaust Fan/Mainhole/Segel)</label><textarea name="KONDISI RELAY / HEATER / GARDU / GEMBOK / VENTILASI / EXHAUST FAN / MAINHOLE / SEGEL"></textarea></div>
+                <div class="form-group"><label>Kategori Pemeliharaan</label><input type="text" name="KATEGORI PEMELIHARAAN"></div>
+                <div class="form-group"><label>Catatan</label><textarea name="CATATAN"></textarea></div>
+                <div class="form-group"><label>Tanggal Pemeliharaan Berikutnya</label><input type="date" name="TANGGAL PEMELIHARAAN BERIKUTNYA"></div>
+                <div class="form-group"><label>Petugas PLN</label><input type="text" name="PETUGAS PLN"></div>
+                <div class="form-group"><label>Tanggal</label><input type="date" name="TANGGAL"></div>
+                <div class="form-group"><label>Jam</label><input type="time" name="JAM"></div>
+                <div class="form-group"><label>Status</label><input type="text" name="STATUS"></div>
+                
+                </form>
+            </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

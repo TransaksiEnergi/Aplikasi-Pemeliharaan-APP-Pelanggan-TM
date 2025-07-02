@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pilih Aksi Pekerjaan - Aplikasi Pemeliharaan TM</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="dashboard-header-logo-container">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Logo_PLN.svg/2560px-Logo_PLN.svg.png" alt="Logo PLN" class="header-logo">
+        </div>
+    </header>
+
+    <div class="container content">
+        <!-- Kartu informasi pekerjaan -->
+        <div id="work-info-card" class="add-work-card" style="margin-bottom: 30px;">
+            <h2 style="text-align: center; margin-top:0;">Detail Pekerjaan</h2>
+            <p><strong>ID Pekerjaan:</strong> <span id="workIdDisplay">Memuat...</span></p>
+            <p><strong>Nama Pekerjaan:</strong> <span id="workNameDisplay">Memuat...</span></p>
+            <p><strong>Pelanggan:</strong> <span id="customerNameDisplay">Memuat...</span></p>
+            <p><strong>Alamat:</strong> <span id="customerAddressDisplay">Memuat...</span></p>
+        </div>
+
+        <h2 style="text-align: center;">Pilih Aksi</h2>
+        
+        <!-- Grid untuk dua tombol navigasi -->
+        <div class="dashboard-grid">
+            <div class="dashboard-item">
+                <a id="goToDataForm" href="#">
+                    <!-- Ikon untuk Form Data -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    <p>Isi Data Pekerjaan</p>
+                </a>
+            </div>
+            <div class="dashboard-item">
+                <a id="goToPhotoForm" href="#">
+                    <!-- Ikon untuk Kamera/Foto -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                    <p>Input Foto Dokumentasi</p>
+                </a>
+            </div>
+        </div>
+
+        <!-- Tombol Aksi Selesai Ditambahkan Di Sini -->
+        <div class="main-action-buttons" style="margin-top: 30px; margin-bottom: 15px;">
+             <button id="finishWorkFromAksi" class="button complete-button">Selesai & Kirimkan Pekerjaan</button>
+        </div>
+
+        <p class="back-link-container"><a href="pekerjaan.html" class="button">Kembali ke Daftar Pekerjaan</a></p>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

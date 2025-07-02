@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Pekerjaan - Aplikasi Pemeliharaan TM</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="dashboard-header-logo-container">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Logo_PLN.svg/2560px-Logo_PLN.svg.png" alt="Logo PLN" class="header-logo">
+        </div>
+    </header>
+
+    <div class="container content">
+        <h2 style="text-align: center;">Cari Data Pekerjaan</h2>
+        <div class="search-filter-card">
+            <form id="searchForm" class="search-filter-form">
+                <div class="form-group-inline">
+                    <label for="searchIdPekerjaan">ID Pelanggan / Pekerjaan / Nama</label>
+                    <input type="text" id="searchIdPekerjaan" name="idPekerjaan" placeholder="Masukkan ID atau Nama...">
+                </div>
+                <div class="form-group-inline">
+                    <label for="searchNamaPekerjaan">Nama Pekerjaan</label>
+                    <input type="text" id="searchNamaPekerjaan" name="namaPekerjaan" placeholder="Masukkan nama pekerjaan...">
+                </div>
+                <div class="form-group-inline">
+                    <label for="searchStatusPekerjaan">Status</label>
+                    <select id="searchStatusPekerjaan" name="statusPekerjaan">
+                        <option value="">Semua Status</option>
+                        <option value="Selesai">Selesai</option>
+                        <option value="Berjalan">Berjalan</option>
+                        <option value="Terjadwal">Terjadwal</option>
+                        <option value="Belum Dikerjakan">Belum Dikerjakan</option>
+                    </select>
+                </div>
+                <button type="submit" class="search-button">Cari</button>
+            </form>
+        </div>
+
+        <h2 style="text-align: center;">Daftar Pekerjaan</h2>
+        
+        <div class="customer-maintenance-grid" id="customerMaintenanceList">
+            <p style="text-align: center; color: #666;">Memuat data pekerjaan...</p>
+        </div>
+
+        <div class="back-link-container">
+            <button id="backToDashboardBtn" class="button secondary-button">&larr; Kembali ke Dashboard</button>
+        </div>
+        </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

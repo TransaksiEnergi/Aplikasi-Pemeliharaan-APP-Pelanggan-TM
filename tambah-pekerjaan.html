@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tambah Pekerjaan - Aplikasi Pemeliharaan TM</title>
+    <link rel="stylesheet" href="css/style.css"> 
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="dashboard-header-logo-container">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Logo_PLN.svg/2560px-Logo_PLN.svg.png" alt="Logo PLN" class="header-logo">
+        </div>
+    </header>
+
+    <div class="container content">
+        <h2 style="text-align: center;">Tambahkan Pekerjaan Baru</h2>
+       
+        <div class="add-work-card">
+            <div class="error-message" id="tambahPekerjaanError"></div>
+            <form id="tambahPekerjaanForm" class="add-work-form">
+                <div class="form-group">
+                    <label for="idPelangganPekerjaan">ID Pelanggan:</label>
+                    <input type="text" id="idPelangganPekerjaan" name="idPelanggan" list="customerDatalist" placeholder="Ketik atau pilih ID Pelanggan..." required>
+                    <datalist id="customerDatalist">
+                        <!-- Opsi diisi oleh JavaScript -->
+                    </datalist>
+                </div>
+                <div class="form-group">
+                    <label for="namaPelangganTampil">Nama Pelanggan:</label>
+                    <input type="text" id="namaPelangganTampil" readonly disabled placeholder="Nama akan Terisi Otomatis">
+                </div>
+                <div class="form-group">
+                    <label for="alamatPelangganTampil">Alamat Pelanggan:</label>
+                    <textarea id="alamatPelangganTampil" rows="3" readonly disabled placeholder="Alamat akan Terisi Otomatis"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="namaPekerjaan">Nama Pekerjaan:</label>
+                    <input type="text" id="namaPekerjaan" name="namaPekerjaan" placeholder="Contoh: Pemeliharaan Kubikel" required>
+                </div>
+                <div class="form-group">
+                    <label for="deskripsiPekerjaan">Deskripsi Pekerjaan:</label>
+                    <textarea id="deskripsiPekerjaan" name="deskripsiPekerjaan" rows="4" placeholder="Detail pekerjaan, lokasi, dll." required></textarea>
+                </div>
+
+                <!-- PERUBAHAN DI SINI -->
+                <div class="form-group">
+                    <label for="statusPekerjaan">Status:</label>
+                    <select id="statusPekerjaan" name="statusPekerjaan" required>
+                        <option value="Kirimkan">Kirimkan (Belum Dikerjakan)</option>
+                        <option value="Terjadwal">Terjadwal</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" id="tanggalPelaksanaanGroup" style="display: none;">
+                    <label for="tanggalPelaksanaan">Tanggal Pelaksanaan:</label>
+                    <input type="datetime-local" id="tanggalPelaksanaan" name="tanggalPelaksanaan">
+                </div>
+                
+                <button type="submit" class="add-work-button">Tambahkan Pekerjaan</button>
+            </form>
+        </div>
+
+        <p class="back-link-container"><a href="dashboard-admin.html" class="button">Kembali ke Dashboard</a></p>
+    </div>
+
+    <script src="js/script.js"></script> 
+</body>
+</html>

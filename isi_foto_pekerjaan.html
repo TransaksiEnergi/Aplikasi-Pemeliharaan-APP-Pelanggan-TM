@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Foto Pekerjaan - Aplikasi Pemeliharaan TM</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        fieldset {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        legend {
+            font-weight: bold;
+            font-size: 1.1em;
+            padding: 0 10px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="dashboard-header-logo-container">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Logo_PLN.svg/2560px-Logo_PLN.svg.png" alt="Logo PLN" class="header-logo">
+        </div>
+    </header>
+
+    <div class="container content">
+        <div class="add-work-card">
+            <!-- Info Header (Diperbarui dengan Alamat) -->
+            <div id="work-info-header" class="work-info-header">
+                <h2>Unggah Foto untuk Pekerjaan: <span id="workIdDisplay">Memuat...</span></h2>
+                <p><strong>Pelanggan:</strong> <span id="customerNameDisplay">Memuat...</span> (<span id="idpelDisplay">...</span>)</p>
+                <p><strong>Alamat:</strong> <span id="customerAddressDisplay">Memuat...</span></p> <!-- BARIS INI DITAMBAHKAN -->
+            </div>
+            <hr>
+
+            <!-- Form untuk Input Foto -->
+            <form id="workPhotoForm" enctype="multipart/form-data">
+                <fieldset>
+                    <legend>Unggah Foto Dokumentasi</legend>
+                    <div class="form-grid grid-col-responsive">
+                        <!-- Kolom ini akan terisi otomatis -->
+                        <div class="form-group" style="display:none;"><label>IDPEL</label><input type="text" name="IDPEL" id="formIdpel" readonly></div>
+                        <div class="form-group" style="display:none;"><label>Nama</label><input type="text" name="NAMA" id="formNama" readonly></div>
+
+                        <!-- Daftar Input Foto -->
+                        <div class="form-group"><label>Foto Hasil Ukur LBS Fasa R</label><input type="file" name="FOTO HASIL UKUR LBS FASA R" accept="image/*"></div>
+                        <div class="form-group"><label>Foto Hasil Ukur LBS Fasa S</label><input type="file" name="FOTO HASIL UKUR LBS FASA S" accept="image/*"></div>
+                        <div class="form-group"><label>Foto Hasil Ukur LBS Fasa T</label><input type="file" name="FOTO HASIL UKUR LBS FASA T" accept="image/*"></div>
+                        <div class="form-group"><label>Foto Hasil Ukur Busbar Fasa R</label><input type="file" name="FOTO HASIL UKUR BUSBAR FASA R" accept="image/*"></div>
+                        <div class="form-group"><label>Foto Hasil Ukur Busbar Fasa S</label><input type="file" name="FOTO HASIL UKUR BUSBAR FASA S" accept="image/*"></div>
+                        <div class="form-group"><label>Foto Hasil Ukur Busbar Fasa T</label><input type="file" name="FOTO HASIL UKUR BUSBAR FASA T" accept="image/*"></div>
+                        <div class="form-group"><label>Foto CT Fasa R</label><input type="file" name="FOTO CT FASA R" accept="image/*"></div>
+                        <div class="form-group"><label>Foto CT Fasa S</label><input type="file" name="FOTO CT FASA S" accept="image/*"></div>
+                        <div class="form-group"><label>Foto CT Fasa T</label><input type="file" name="FOTO CT FASA T" accept="image/*"></div>
+                        <div class="form-group"><label>Foto PT Fasa R</label><input type="file" name="FOTO PT FASA R" accept="image/*"></div>
+                        <div class="form-group"><label>Foto PT Fasa S</label><input type="file" name="FOTO PT FASA S" accept="image/*"></div>
+                        <div class="form-group"><label>Foto PT Fasa T</label><input type="file" name="FOTO PT FASA T" accept="image/*"></div>
+                    </div>
+                </fieldset>
+                <div class="main-action-buttons">
+                    <button type="submit" class="button" id="uploadPhotoButton">Unggah Foto yang Dipilih</button>
+                </div>
+                <div id="uploadStatus" style="text-align:center; margin-top:15px; font-weight:bold;"></div>
+            </form>
+        </div>
+        <p class="back-link-container"><a href="#" id="backToAksiLink" class="button">Kembali ke Pilih Aksi</a></p>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

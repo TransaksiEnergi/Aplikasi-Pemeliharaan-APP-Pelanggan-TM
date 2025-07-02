@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hapus Akun - Aplikasi Pemeliharaan TM</title>
+    <link rel="stylesheet" href="css/style.css"> <!-- Pastikan path CSS yang benar -->
+</head>
+<body class="login-container"> <!-- Mengubah kelas body menjadi login-container -->
+    
+    <div class="login-box"> <!-- Membungkus konten utama di dalam login-box -->
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Logo_PLN.svg/2560px-Logo_PLN.svg.png" alt="Logo_PLN" class="logo-pln">
+
+        <h2>Hapus Akun Pengguna</h2>
+        <div class="error-message" id="hapusAkunError"></div>
+        <form id="hapusAkunForm">
+            <div class="form-group">
+                <label for="usernameHapus">Masukkan Username Akun yang Akan Dihapus:</label>
+                <input type="text" id="usernameHapus" name="usernameHapus" required>
+            </div>
+            <button type="submit">Hapus Akun</button>
+        </form>
+        <!-- Memindahkan link kembali ke dalam login-box jika diinginkan, atau biarkan di luar untuk posisi terpisah -->
+        <p><a href="pusat-akun.html">Kembali ke Pusat Akun</a></p>
+    </div>
+
+    <script src="js/script.js"></script> <!-- Pastikan path JS yang benar -->
+</body>
+</html>

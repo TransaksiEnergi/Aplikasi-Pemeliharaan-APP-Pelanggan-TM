@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tambah Pelanggan - Aplikasi Pemeliharaan TM</title>
+    <link rel="stylesheet" href="css/style.css"> <!-- Pastikan path CSS yang benar -->
+</head>
+<body>
+    <!-- Bagian Header Dashboard (konsisten dengan dashboard admin) -->
+    <header class="dashboard-header">
+        <div class="dashboard-header-logo-container">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Logo_PLN.svg/2560px-Logo_PLN.svg.png" alt="Logo PLN" class="header-logo">
+        </div>
+    </header>
+
+    <div class="container content">
+        <h2 style="text-align: center;">Tambahkan Data Pelanggan Baru</h2>
+        
+        <!-- Bagian Form dalam card -->
+        <div class="add-work-card">
+            <div class="error-message" id="addCustomerError"></div>
+            <form id="addCustomerForm" class="add-work-form">
+                <div class="form-group">
+                    <label for="unitup">UNITUP:</label>
+                    <input type="text" id="unitup" name="UNITUP" placeholder="Contoh: 14130" required>
+                </div>
+                <div class="form-group">
+                    <label for="idpel">IDPEL:</label>
+                    <input type="text" id="idpel" name="IDPEL" placeholder="Contoh: 149000250659" required>
+                </div>
+                <div class="form-group">
+                    <label for="nama">NAMA Perusahaan:</label>
+                    <input type="text" id="nama" name="NAMA" placeholder="Contoh: PT SLCR SEMBADA PRASADA" required>
+                </div>
+                <div class="form-group">
+                    <label for="notelp">NO_TLP:</label>
+                    <input type="text" id="notelp" name="NO_TLP" placeholder="Contoh: 82188887600">
+                </div>
+                <div class="form-group">
+                    <label for="alamat">ALAMAT:</label>
+                    <textarea id="alamat" name="ALAMAT" rows="3" placeholder="Contoh: JL LINTAS SUMATRA DESA NO KM 19..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="tarif">TARIF:</label>
+                    <input type="text" id="tarif" name="TARIF" placeholder="Contoh: I3">
+                </div>
+                <div class="form-group">
+                    <label for="daya">DAYA:</label>
+                    <input type="text" id="daya" name="DAYA" placeholder="Contoh: 277000">
+                </div>
+                <div class="form-group">
+                    <label for="faktorkali">FAKTOR KALI DIL:</label>
+                    <input type="text" id="faktorkali" name="FAKTOR_KALI_DIL" placeholder="Contoh: 0003200">
+                </div>
+                <div class="form-group">
+                    <label for="merekkwh">MEREK KWH:</label>
+                    <input type="text" id="merekkwh" name="MEREK_KWH" placeholder="Contoh: HEXING">
+                </div>
+                <div class="form-group">
+                    <label for="tipekwh">TIPE KWH:</label>
+                    <input type="text" id="tipekwh" name="TIPE_KWH" placeholder="Contoh: 2023">
+                </div>
+                <div class="form-group">
+                    <label for="thterakwh">THTERAKWH:</label>
+                    <input type="text" id="thterakwh" name="THTERAKWH" placeholder="Contoh: 180">
+                </div>
+                <div class="form-group">
+                    <label for="noserikwh">NOMOR SERI KWH:</label>
+                    <input type="text" id="noserikwh" name="NOMOR_SERI_KWH" placeholder="Contoh: 44064">
+                </div>
+                <div class="form-group">
+                    <label for="koordinatx">KOORDINAT_X:</label>
+                    <input type="text" id="koordinatx" name="KOORDINAT_X" placeholder="Contoh: -3.115822222">
+                </div>
+                <div class="form-group">
+                    <label for="koordinaty">KOORDINAT_Y:</label>
+                    <input type="text" id="koordinaty" name="KOORDINAT_Y" placeholder="Contoh: 104.7011422">
+                </div>
+                <div class="form-group">
+                    <label for="tikor">TIKOR:</label>
+                    <input type="text" id="tikor" name="TIKOR" placeholder="Contoh: -3.1158222222, 104.7011422222">
+                </div>
+
+                <button type="submit" class="add-work-button">Tambahkan Pelanggan</button>
+            </form>
+        </div>
+
+        <p class="back-link-container"><a href="data_pelanggan.html" class="button">Kembali ke Data Pelanggan</a></p>
+    </div>
+
+    <script src="js/script.js"></script> <!-- Pastikan path JS yang benar -->
+</body>
+</html>

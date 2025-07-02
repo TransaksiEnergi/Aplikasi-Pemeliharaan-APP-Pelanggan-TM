@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Pekerjaan - Aplikasi Pemeliharaan TM</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="dashboard-header-logo-container">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Logo_PLN.svg/2560px-Logo_PLN.svg.png" alt="Logo PLN" class="header-logo">
+        </div>
+    </header>
+
+    <div class="container content">
+        <h2 style="text-align: center;">Detail Pekerjaan</h2>
+        
+        <div class="add-work-card">
+            <div id="workDetailDisplay">
+                <!-- Data detail pekerjaan akan dimuat di sini oleh script.js -->
+                <p><strong>ID Pekerjaan:</strong> <span id="detail-id-pekerjaan">Memuat...</span></p>
+                <p><strong>Nama Pekerjaan:</strong> <span id="detail-nama-pekerjaan">Memuat...</span></p>
+                <p><strong>Status:</strong> <span id="detail-status-pekerjaan">Memuat...</span></p>
+                <p><strong>Tanggal Pelaksanaan:</strong> <span id="detail-tanggal-pelaksanaan">Memuat...</span></p>
+                <hr style="margin: 15px 0;">
+                <p><strong>ID Pelanggan:</strong> <span id="detail-id-pelanggan">Memuat...</span></p>
+                <p><strong>Nama Pelanggan:</strong> <span id="detail-nama-pelanggan">Memuat...</span></p>
+                <p><strong>Alamat Pelanggan:</strong> <span id="detail-alamat-pelanggan">Memuat...</span></p>
+                <hr style="margin: 15px 0;">
+                <p><strong>Deskripsi:</strong></p>
+                <p><span id="detail-deskripsi-pekerjaan" style="white-space: pre-wrap;">Memuat...</span></p>
+            </div>
+            <div id="detailError" class="error-message"></div>
+        </div>
+
+        <p class="back-link-container"><a href="pekerjaan.html" class="button">Kembali ke Daftar Pekerjaan</a></p>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

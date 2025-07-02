@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin - Aplikasi Pemeliharaan APP TM</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="dashboard-header-logo-container">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Logo_PLN.svg/2560px-Logo_PLN.svg.png" alt="Logo PLN" class="header-logo">
+        </div>
+    </header>
+
+    <div class="dashboard-summary-container">
+        <div class="banyak-pelanggan-card">
+            <h3>Banyak Pelanggan</h3>
+            <p class="count-number" id="jumlahPelanggan">Memuat...</p>
+        </div>
+
+        <div class="data-pemeliharaan-card">
+            <h3>Data Pemeliharaan</h3>
+            <div class="maintenance-stats-grid">
+                <div class="maintenance-stat-item">
+                    <p>Selesai</p>
+                    <p class="count-number" id="pemeliharaanSelesai">0</p>
+                </div>
+                <div class="maintenance-stat-item">
+                    <p>Berjalan</p>
+                    <p class="count-number" id="pemeliharaanBerjalan">0</p>
+                </div>
+                <div class="maintenance-stat-item">
+                    <p>Terjadwal</p>
+                    <p class="count-number" id="pemeliharaanTerjadwal">0</p>
+                </div>
+                <div class="maintenance-stat-item">
+                    <p>Belum Dikerjakan</p>
+                    <p class="count-number" id="pemeliharaanBelumDikerjakan">0</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PERBAIKAN DI SINI: Mengembalikan path gambar asli Anda -->
+    <div class="dashboard-grid">
+        <div class="dashboard-item">
+            <a href="data_pelanggan.html">
+                <img src="img/Data Pelanggan.png" alt="Data Pelanggan">
+                <p>Data Pelanggan</p>
+            </a>
+        </div>
+        <div class="dashboard-item">
+            <a href="pusat-akun.html">
+                <img src="img/Pusat Akun.png" alt="Pusat Akun">
+                <p>Pusat Akun</p>
+            </a>
+        </div>
+        <div class="dashboard-item">
+            <a href="pekerjaan.html">
+                <img src="img/Pekerjaan.png" alt="Pekerjaan">
+                <p>Pekerjaan</p>
+            </a>
+        </div>
+        <div class="dashboard-item">
+            <a href="tambah-pekerjaan.html">
+                <img src="img/Tambah Pekerjaan.png" alt="Tambah Pekerjaan">
+                <p>Tambah Pekerjaan</p>
+            </a>
+        </div>
+        <div class="dashboard-item">
+            <a href="berita-acara.html">
+                <img src="img/Berita Acara.png" alt="Berita Acara">
+                <p>Berita Acara</p>
+            </a>
+        </div>
+        <div class="dashboard-item">
+            <a href="login.html">
+                <img src="img/logout.png" alt="Logout">
+                <p>Logout</p>
+            </a>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

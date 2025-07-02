@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Pelanggan - Aplikasi Pemeliharaan TM</title>
+    <link rel="stylesheet" href="css/style.css"> <!-- Pastikan path CSS yang benar -->
+</head>
+<body>
+    <!-- Bagian Header Dashboard (konsisten dengan dashboard admin) -->
+    <header class="dashboard-header">
+        <div class="dashboard-header-logo-container">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Logo_PLN.svg/2560px-Logo_PLN.svg.png" alt="Logo PLN" class="header-logo">
+        </div>
+    </header>
+
+    <div class="container content">
+        <h2 style="text-align: center;">Detail Data Pelanggan</h2>
+        
+        <!-- Bagian Display Detail dalam card -->
+        <div class="add-work-card">
+            <div id="customerDetailDisplay">
+                <!-- Data detail pelanggan akan dimuat di sini -->
+                <p><strong>UNITUP:</strong> <span id="detailUnitup">Memuat...</span></p>
+                <p><strong>IDPEL:</strong> <span id="detailIdpel">Memuat...</span></p>
+                <p><strong>NAMA:</strong> <span id="detailNama">Memuat...</span></p>
+                <p><strong>NO_TLP:</strong> <span id="detailNoTlp">Memuat...</span></p>
+                <p><strong>ALAMAT:</strong> <span id="detailAlamat">Memuat...</span></p>
+                <p><strong>TARIF:</strong> <span id="detailTarif">Memuat...</span></p>
+                <p><strong>DAYA:</strong> <span id="detailDaya">Memuat...</span></p>
+                <p><strong>FAKTOR KALI DIL:</strong> <span id="detailFaktorKaliDil">Memuat...</span></p>
+                <p><strong>MEREK KWH:</strong> <span id="detailMerekKwh">Memuat...</span></p>
+                <p><strong>TIPE KWH:</strong> <span id="detailTipeKwh">Memuat...</span></p>
+                <p><strong>THTERAKWH:</strong> <span id="detailThterakwh">Memuat...</span></p>
+                <p><strong>NOMOR SERI KWH:</strong> <span id="detailNomorSeriKwh">Memuat...</span></p>
+                <p><strong>KOORDINAT_X:</strong> <span id="detailKoordinatX">Memuat...</span></p>
+                <p><strong>KOORDINAT_Y:</strong> <span id="detailKoordinatY">Memuat...</span></p>
+                <p><strong>TIKOR:</strong> <span id="detailTikor">Memuat...</span></p>
+            </div>
+            <div id="detailError" class="error-message"></div>
+        </div>
+
+        <p class="back-link-container"><a href="data_pelanggan.html" class="button">Kembali ke Data Pelanggan</a></p>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

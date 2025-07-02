@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Pelanggan - Aplikasi Pemeliharaan TM</title>
+    <link rel="stylesheet" href="css/style.css"> <!-- Pastikan path CSS yang benar -->
+</head>
+<body>
+    <!-- Bagian Header Dashboard dengan Hanya Logo PLN -->
+    <header class="dashboard-header">
+        <div class="dashboard-header-logo-container">
+            <!-- Menggunakan URL eksternal untuk logo PLN -->
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Logo_PLN.svg/2560px-Logo_PLN.svg.png" alt="Logo PLN" class="header-logo">
+            <!-- Menghilangkan span.header-text di sini untuk hanya menampilkan logo, ini sudah diatur oleh CSS -->
+        </div>
+    </header>
+
+    <div class="container content">
+        <h2 style="text-align: center;">Cari Data Pelanggan</h2>
+        <!-- Bagian Filter Pencarian -->
+        <div class="search-filter-card">
+            <form id="searchForm" class="search-filter-form">
+                <div class="form-group-inline">
+                    <label for="searchIdPelanggan">ID Pelanggan</label>
+                    <input type="text" id="searchIdPelanggan" name="idPelanggan" placeholder="Masukkan ID...">
+                </div>
+                <div class="form-group-inline">
+                    <label for="searchNamaPerusahaan">Nama Perusahaan</label>
+                    <input type="text" id="searchNamaPerusahaan" name="namaPerusahaan" placeholder="Masukkan nama...">
+                </div>
+                <!-- Filter Status Dihilangkan di sini -->
+                <button type="submit" class="search-button">Cari</button>
+            </form>
+        </div>
+
+        <h2 style="text-align: center;">Daftar Pelanggan</h2>
+        <div class="action-bar">
+            <!-- Tombol "Kembali ke Dashboard" dipindahkan ke sini -->
+            <a href="dashboard-admin.html" class="button back-to-dashboard-button">Dashboard</a>
+            
+            <button class="button add-new-button" id="tambahBaru">
+                + Tambah Baru
+            </button>
+        </div>
+        
+        <div class="customer-maintenance-grid" id="customerMaintenanceList">
+            <!-- Konten akan dimuat secara dinamis dari database di sini -->
+            <p style="text-align: center; color: #666;">Memuat data pelanggan...</p>
+            <!-- Anda bisa menambahkan indikator loading di sini -->
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
