@@ -29,13 +29,8 @@ async function callBackend(action, params = {}) {
         }
     }
 
-    // Logika lama untuk URL-encoded params
-    const urlParams = new URLSearchParams({ action });
-    for (const key in params) {
-        if (params.hasOwnProperty(key)) {
-            urlParams.append(key, params[key]);
-        }
-    }
+    // Logika untuk data URL-encoded
+    const urlParams = new URLSearchParams({ action, ...params });
     try {
         const response = await fetch(BASE_APP_SCRIPT_URL, {
             method: 'POST',
@@ -58,7 +53,7 @@ async function callBackend(action, params = {}) {
 
 function displayMessage(message, type = 'info', duration = 4000) {
     const existingModal = document.querySelector('.custom-modal');
-    if(existingModal) existingModal.remove();
+    if (existingModal) existingModal.remove();
     const modal = document.createElement('div');
     modal.classList.add('custom-modal');
     modal.innerHTML = `<div class="modal-content ${type}"><span class="close-button">&times;</span><p>${message}</p></div>`;
@@ -429,20 +424,46 @@ async function handleBeritaAcaraPage() {
     const searchForm = document.getElementById('searchForm');
     if (!grid || !searchForm) return;
 
+    function downloadPdfFromBase64(base64Data, fileName) {
+        try {
+            const byteCharacters = atob(base64Data);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], {type: 'application/pdf'});
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } catch (e) {
+            console.error("Gagal memproses PDF:", e);
+            displayMessage("Gagal mengunduh PDF.", "error");
+        }
+    }
+    
+    // ===================================================================
+    // ======================== PERBAIKAN DI SINI ========================
+    // ===================================================================
     function createBeritaAcaraCard(item) {
         const card = document.createElement('div');
         card.className = 'customer-maintenance-item';
+        
+        // Menambahkan gaya inline untuk memastikan tombolnya benar
+        const buttonStyle = "width: 100%; max-width: 450px; padding: 12px 18px; font-size: 16px; border-radius: 8px;";
+
         card.innerHTML = `
             <div class="item-header">
-                <span class="item-id">ID: ${item.IDPEL || 'N/A'}</span>
+                <span class="item-id">ID Pelanggan: ${item.IDPEL || 'N/A'}</span>
             </div>
             <h3>${item.NAMA || 'Nama tidak tersedia'}</h3>
             <p>Alamat: ${item.ALAMAT || 'N/A'}</p>
-            <p>Telp: ${item.NO_TLP || 'N/A'}</p>
-            <p>Tarif/Daya: ${item.TARIF_DAYA || 'N/A'}</p>
-            <p>Merek KWH: ${item.MEREK_KWH || 'N/A'}, No. Seri: ${item.NO_SERI_KWH || 'N/A'}</p>
+            <p>ID Pekerjaan: ${item.ID_PEKERJAAN || 'N/A'}</p>
             <div class="item-actions">
-                <button class="print-button" data-id="${item.IDPEL}">Cetak Berita Acara</button>
+                <button class="print-button" data-work-id="${item.ID_PEKERJAAN}" style="${buttonStyle}">Cetak Berita Acara</button>
             </div>
         `;
         return card;
@@ -468,10 +489,26 @@ async function handleBeritaAcaraPage() {
         loadCompletedWorks(searchParams);
     });
 
-    grid.addEventListener('click', (event) => {
+    grid.addEventListener('click', async (event) => {
         if (event.target.classList.contains('print-button')) {
-            const customerId = event.target.dataset.id;
-            alert(`Fitur cetak untuk pelanggan ID: ${customerId} belum diimplementasikan di script.js utama.`);
+            const printButton = event.target;
+            const workId = printButton.dataset.workId;
+            if (!workId) return displayMessage('ID Pekerjaan tidak ditemukan pada tombol.', 'error');
+
+            const originalText = printButton.textContent;
+            printButton.disabled = true;
+            printButton.textContent = 'Mencetak...';
+
+            const result = await callBackend('print', { workId: workId });
+            if (result.success && result.pdfData) {
+                downloadPdfFromBase64(result.pdfData.base64Data, result.pdfData.fileName);
+            } else {
+                displayMessage(result.message || 'Gagal membuat PDF.', 'error');
+                console.error('Print Error:', result);
+            }
+
+            printButton.disabled = false;
+            printButton.textContent = originalText;
         }
     });
 
@@ -580,24 +617,22 @@ async function handleIsiFotoPage() {
         document.getElementById('idpelDisplay').textContent = work.ID_PELANGGAN;
         document.getElementById('customerAddressDisplay').textContent = work.ALAMAT_PELANGGAN;
         
+        // Isi field tersembunyi
+        document.getElementById('formWorkId').value = work.ID_PEKERJAAN;
         document.getElementById('formIdpel').value = work.ID_PELANGGAN;
         document.getElementById('formNama').value = work.NAMA_PELANGGAN;
     } else {
-         document.querySelector('.container.content').innerHTML = `<p style="text-align:center;color:red;">Gagal memuat detail pekerjaan: ${detailResult.message}</p>`;
+        document.querySelector('.container.content').innerHTML = `<p style="text-align:center;color:red;">Gagal memuat detail pekerjaan: ${detailResult.message}</p>`;
         return;
     }
 
     photoForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const uploadButton = document.getElementById('uploadPhotoButton');
-        const uploadStatus = document.getElementById('uploadStatus');
-
         const formData = new FormData(photoForm);
-        formData.append('workId', workId);
         
         uploadButton.disabled = true;
         uploadButton.textContent = 'Mengunggah...';
-        uploadStatus.textContent = '';
 
         const result = await callBackend('uploadPhotos', formData);
 
