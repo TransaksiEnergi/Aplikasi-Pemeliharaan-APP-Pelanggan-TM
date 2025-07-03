@@ -439,11 +439,14 @@ body {
     color: #666;
 }
 
+/* ======================================================= */
+/* ============== PERUBAHAN 1: POSISI TOMBOL ============== */
+/* ======================================================= */
 .customer-maintenance-item .item-actions {
     display: flex;
     gap: 10px;
     margin-top: 15px;
-    justify-content: flex-end;
+    justify-content: center; /* Diubah dari flex-end */
 }
 
 .action-button-25 {
@@ -508,16 +511,22 @@ body {
     margin-top: 20px;
 }
 
+/* ======================================================= */
+/* ============== PERUBAHAN 2: UKURAN TOMBOL ============== */
+/* ======================================================= */
 /* -------------------- Print Button Style for Berita Acara -------------------- */
 .print-button {
-    background-color: #007bff; 
+    width: 100%;
+    max-width: 450px;
+    padding: 12px 18px;
+    font-size: 16px;
+    border-radius: 8px;
+    background-color: #007bff;
     color: white;
-    padding: 8px 15px; 
     border: none;
-    border-radius: 5px;
-    font-size: 0.9em;
-    width: auto; 
     cursor: pointer;
+    text-decoration: none;
+    text-align: center;
     transition: background-color 0.3s ease;
 }
 
@@ -747,7 +756,7 @@ body {
         width: 100%;
         margin-top: 10px;
     }
-   
+    
     .action-bar {
         flex-direction: row; 
     }
@@ -801,7 +810,7 @@ body {
 
 
 /* =================================================================== */
-/* TAMBAHAN GAYA UNTUK STATUS DAN TOMBOL PEKERJAAN                      */
+/* TAMBAHAN GAYA UNTUK STATUS DAN TOMBOL PEKERJAAN                     */
 /* (Ini adalah gaya baru yang ditambahkan)                             */
 /* =================================================================== */
 
@@ -881,8 +890,8 @@ body {
 
 /* Membuat kedua tombol memanjang dan ukurannya sama */
 .action-bar.top-actions .button {
-    flex-grow: 1;           /* Kunci agar tombol memanjang */
-    max-width: 400px;       /* Opsional: Batas lebar maksimum per tombol */
+    flex-grow: 1;            /* Kunci agar tombol memanjang */
+    max-width: 400px;        /* Opsional: Batas lebar maksimum per tombol */
 }
 
 /* Tombol biru untuk "Kembali" */
@@ -897,6 +906,6 @@ body {
 .action-bar .save-button {
     background-color: #28a745;
 }
-.action-bar .save-button:hover {
+.action-ar .save-button:hover {
     background-color: #218838;
 }
