@@ -3,21 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Input Foto Pekerjaan - Aplikasi Pemeliharaan TM</title>
+    <title>Isi Data Foto - Aplikasi Pemeliharaan TM</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        fieldset {
-            border: 1px solid #ddd;
-            padding: 20px;
-            margin-bottom: 25px;
-            border-radius: 8px;
-            background-color: #f9f9f9;
+        /* Menambahkan sedikit style agar dropdown terlihat rapi */
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
         }
-        legend {
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group-label {
+            margin-bottom: 5px;
+        }
+
+        /* CSS UNTUK TOMBOL */
+        .main-action-buttons {
+            display: flex; /* Membuat tombol sejajar */
+            gap: 10px;      /* Memberi jarak antar tombol */
+            margin-bottom: 20px; /* Memberi jarak ke bawah, ke arah checklist */
+        }
+
+        .button {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 8px; /* Sudut membulat */
+            color: white;
+            font-size: 16px;
             font-weight: bold;
-            font-size: 1.1em;
-            padding: 0 10px;
-            color: #333;
+            cursor: pointer;
+            text-decoration: none; /* Menghapus garis bawah pada link */
+            text-align: center;
+        }
+
+        .button-primary {
+            background-color: #28a745; /* Warna hijau */
+        }
+        .button-primary:hover {
+            background-color: #218838; /* Warna hijau lebih gelap saat disentuh */
+        }
+
+        .button-secondary {
+            background-color: #007bff; /* Warna biru */
+        }
+        .button-secondary:hover {
+            background-color: #0056b3; /* Warna biru lebih gelap saat disentuh */
         }
     </style>
 </head>
@@ -30,45 +65,139 @@
 
     <div class="container content">
         <div class="add-work-card">
-            <!-- Info Header (Diperbarui dengan Alamat) -->
             <div id="work-info-header" class="work-info-header">
-                <h2>Unggah Foto untuk Pekerjaan: <span id="workIdDisplay">Memuat...</span></h2>
+                <h2>Isi Data untuk Foto: <span id="workIdDisplay">Memuat...</span></h2>
                 <p><strong>Pelanggan:</strong> <span id="customerNameDisplay">Memuat...</span> (<span id="idpelDisplay">...</span>)</p>
-                <p><strong>Alamat:</strong> <span id="customerAddressDisplay">Memuat...</span></p> <!-- BARIS INI DITAMBAHKAN -->
+                <p><strong>Alamat:</strong> <span id="customerAddressDisplay">Memuat...</span></p>
             </div>
             <hr>
 
-            <!-- Form untuk Input Foto -->
-            <form id="workPhotoForm" enctype="multipart/form-data">
-                <fieldset>
-                    <legend>Unggah Foto Dokumentasi</legend>
-                    <div class="form-grid grid-col-responsive">
-                        <!-- Kolom ini akan terisi otomatis -->
-                        <div class="form-group" style="display:none;"><label>IDPEL</label><input type="text" name="IDPEL" id="formIdpel" readonly></div>
-                        <div class="form-group" style="display:none;"><label>Nama</label><input type="text" name="NAMA" id="formNama" readonly></div>
+            <form id="workChecklistForm">
+                
+                <div class="main-action-buttons">
+                    <a href="#" id="backToAksiLink" class="button button-secondary">← Kembali</a>
+                    <button type="submit" class="button button-primary" id="submitChecklistButton">Simpan Data</button>
+                </div>
 
-                        <!-- Daftar Input Foto -->
-                        <div class="form-group"><label>Foto Hasil Ukur LBS Fasa R</label><input type="file" name="FOTO HASIL UKUR LBS FASA R" accept="image/*"></div>
-                        <div class="form-group"><label>Foto Hasil Ukur LBS Fasa S</label><input type="file" name="FOTO HASIL UKUR LBS FASA S" accept="image/*"></div>
-                        <div class="form-group"><label>Foto Hasil Ukur LBS Fasa T</label><input type="file" name="FOTO HASIL UKUR LBS FASA T" accept="image/*"></div>
-                        <div class="form-group"><label>Foto Hasil Ukur Busbar Fasa R</label><input type="file" name="FOTO HASIL UKUR BUSBAR FASA R" accept="image/*"></div>
-                        <div class="form-group"><label>Foto Hasil Ukur Busbar Fasa S</label><input type="file" name="FOTO HASIL UKUR BUSBAR FASA S" accept="image/*"></div>
-                        <div class="form-group"><label>Foto Hasil Ukur Busbar Fasa T</label><input type="file" name="FOTO HASIL UKUR BUSBAR FASA T" accept="image/*"></div>
-                        <div class="form-group"><label>Foto CT Fasa R</label><input type="file" name="FOTO CT FASA R" accept="image/*"></div>
-                        <div class="form-group"><label>Foto CT Fasa S</label><input type="file" name="FOTO CT FASA S" accept="image/*"></div>
-                        <div class="form-group"><label>Foto CT Fasa T</label><input type="file" name="FOTO CT FASA T" accept="image/*"></div>
-                        <div class="form-group"><label>Foto PT Fasa R</label><input type="file" name="FOTO PT FASA R" accept="image/*"></div>
-                        <div class="form-group"><label>Foto PT Fasa S</label><input type="file" name="FOTO PT FASA S" accept="image/*"></div>
-                        <div class="form-group"><label>Foto PT Fasa T</label><input type="file" name="FOTO PT FASA T" accept="image/*"></div>
+                <input type="hidden" name="workId" id="formWorkId">
+                <input type="hidden" name="IDPEL" id="formIdpel">
+                <input type="hidden" name="NAMA" id="formNama">
+
+                <fieldset>
+                    <legend>Checklist Kelengkapan Dokumentasi Foto</legend>
+                    <div class="form-grid">
+                        
+                        <div class="form-group">
+                            <label for="lbsR_select" class="form-group-label">Foto Hasil Ukur LBS Fasa R</label>
+                            <select name="FOTO HASIL UKUR LBS FASA R" id="lbsR_select">
+                                <option value="" disabled selected>Pilih status...</option>
+                                <option value="Ada">Ada</option>
+                                <option value="Tidak">Tidak</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lbsS_select" class="form-group-label">Foto Hasil Ukur LBS Fasa S</label>
+                            <select name="FOTO HASIL UKUR LBS FASA S" id="lbsS_select">
+                                <option value="" disabled selected>Pilih status...</option>
+                                <option value="Ada">Ada</option>
+                                <option value="Tidak">Tidak</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="lbsT_select" class="form-group-label">Foto Hasil Ukur LBS Fasa T</label>
+                            <select name="FOTO HASIL UKUR LBS FASA T" id="lbsT_select">
+                                <option value="" disabled selected>Pilih status...</option>
+                                <option value="Ada">Ada</option>
+                                <option value="Tidak">Tidak</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="busbarR_select" class="form-group-label">Foto Hasil Ukur Busbar Fasa R</label>
+                            <select name="FOTO HASIL UKUR BUSBAR FASA R" id="busbarR_select">
+                                <option value="" disabled selected>Pilih status...</option>
+                                <option value="Ada">Ada</option>
+                                <option value="Tidak">Tidak</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="busbarS_select" class="form-group-label">Foto Hasil Ukur Busbar Fasa S</label>
+                            <select name="FOTO HASIL UKUR BUSBAR FASA S" id="busbarS_select">
+                                <option value="" disabled selected>Pilih status...</option>
+                                <option value="Ada">Ada</option>
+                                <option value="Tidak">Tidak</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="busbarT_select" class="form-group-label">Foto Hasil Ukur Busbar Fasa T</label>
+                            <select name="FOTO HASIL UKUR BUSBAR FASA T" id="busbarT_select">
+                                <option value="" disabled selected>Pilih status...</option>
+                                <option value="Ada">Ada</option>
+                                <option value="Tidak">Tidak</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ctR_select" class="form-group-label">Foto CT Fasa R</label>
+                            <select name="FOTO CT FASA R" id="ctR_select">
+                                <option value="" disabled selected>Pilih status...</option>
+                                <option value="Ada">Ada</option>
+                                <option value="Tidak">Tidak</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ctS_select" class="form-group-label">Foto CT Fasa S</label>
+                            <select name="FOTO CT FASA S" id="ctS_select">
+                                <option value="" disabled selected>Pilih status...</option>
+                                <option value="Ada">Ada</option>
+                                <option value="Tidak">Tidak</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ctT_select" class="form-group-label">Foto CT Fasa T</label>
+                            <select name="FOTO CT FASA T" id="ctT_select">
+                                <option value="" disabled selected>Pilih status...</option>
+                                <option value="Ada">Ada</option>
+                                <option value="Tidak">Tidak</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ptR_select" class="form-group-label">Foto PT Fasa R</label>
+                            <select name="FOTO PT FASA R" id="ptR_select">
+                                <option value="" disabled selected>Pilih status...</option>
+                                <option value="Ada">Ada</option>
+                                <option value="Tidak">Tidak</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ptS_select" class="form-group-label">Foto PT Fasa S</label>
+                            <select name="FOTO PT FASA S" id="ptS_select">
+                                <option value="" disabled selected>Pilih status...</option>
+                                <option value="Ada">Ada</option>
+                                <option value="Tidak">Tidak</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="ptT_select" class="form-group-label">Foto PT Fasa T</label>
+                            <select name="FOTO PT FASA T" id="ptT_select">
+                                <option value="" disabled selected>Pilih status...</option>
+                                <option value="Ada">Ada</option>
+                                <option value="Tidak">Tidak</option>
+                            </select>
+                        </div>
                     </div>
                 </fieldset>
-                <div class="main-action-buttons">
-                    <button type="submit" class="button" id="uploadPhotoButton">Unggah Foto yang Dipilih</button>
-                </div>
-                <div id="uploadStatus" style="text-align:center; margin-top:15px; font-weight:bold;"></div>
             </form>
         </div>
-        <p class="back-link-container"><a href="#" id="backToAksiLink" class="button">Kembali ke Pilih Aksi</a></p>
     </div>
 
     <script src="js/script.js"></script>

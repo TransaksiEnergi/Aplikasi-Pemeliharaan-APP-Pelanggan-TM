@@ -1,7 +1,7 @@
 // ===================================================================
 // KONFIGURASI GLOBAL
 // ===================================================================
-const BASE_APP_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwMNa3lh7LK4flQ_bEQgF2GZ5YUWDDCb_oko7gfNai2DvGr9g_5W7Rmf97efwaqfdpq/exec';
+const BASE_APP_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxHqNnBQ656O2tfhBWTTGhtL_jxIE1y9yiw9-JG7PDscu3JaEJAo05s2HHPfIYyMTQE/exec';
 let customerDataForDropdown = [];
 
 // ===================================================================
@@ -29,13 +29,8 @@ async function callBackend(action, params = {}) {
         }
     }
 
-    // Logika lama untuk URL-encoded params
-    const urlParams = new URLSearchParams({ action });
-    for (const key in params) {
-        if (params.hasOwnProperty(key)) {
-            urlParams.append(key, params[key]);
-        }
-    }
+    // Logika untuk data URL-encoded
+    const urlParams = new URLSearchParams({ action, ...params });
     try {
         const response = await fetch(BASE_APP_SCRIPT_URL, {
             method: 'POST',
@@ -58,7 +53,7 @@ async function callBackend(action, params = {}) {
 
 function displayMessage(message, type = 'info', duration = 4000) {
     const existingModal = document.querySelector('.custom-modal');
-    if(existingModal) existingModal.remove();
+    if (existingModal) existingModal.remove();
     const modal = document.createElement('div');
     modal.classList.add('custom-modal');
     modal.innerHTML = `<div class="modal-content ${type}"><span class="close-button">&times;</span><p>${message}</p></div>`;
@@ -351,7 +346,7 @@ function createWorkCard(work) {
     const card = document.createElement('div');
     card.className = 'customer-maintenance-item';
     const status = work.STATUS_PEKERJAAN || 'N/A';
-    const statusLC = status.toLowerCase();
+    const statusLC = status.trim().toLowerCase();
     const statusClass = 'status-' + statusLC.replace(/ /g, '-');
     
     const role = sessionStorage.getItem('userRole')?.toLowerCase();
@@ -377,6 +372,7 @@ function createWorkCard(work) {
         </div>`;
     return card;
 }
+
 
 async function handleWorkDetailPage() {
     const workId = new URLSearchParams(window.location.search).get('workId');
@@ -427,22 +423,55 @@ async function handleWorkDetailPage() {
 async function handleBeritaAcaraPage() {
     const grid = document.getElementById('beritaAcaraList');
     const searchForm = document.getElementById('searchForm');
+    
+    // --- KODE BARU DIMULAI DI SINI ---
+    const backButton = document.getElementById('backToAdminDashboardFromBA');
+
+    if (backButton) {
+        backButton.addEventListener('click', (e) => {
+            e.preventDefault(); // Mencegah link default
+            // Langsung arahkan ke dasbor admin, tanpa memeriksa peran
+            window.location.href = 'dashboard-admin.html';
+        });
+    }
+    // --- KODE BARU BERAKHIR DI SINI ---
+
     if (!grid || !searchForm) return;
 
+    function downloadPdfFromBase64(base64Data, fileName) {
+        try {
+            const byteCharacters = atob(base64Data);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], {type: 'application/pdf'});
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } catch (e) {
+            console.error("Gagal memproses PDF:", e);
+            displayMessage("Gagal mengunduh PDF.", "error");
+        }
+    }
+    
     function createBeritaAcaraCard(item) {
         const card = document.createElement('div');
         card.className = 'customer-maintenance-item';
+        
         card.innerHTML = `
             <div class="item-header">
-                <span class="item-id">ID: ${item.IDPEL || 'N/A'}</span>
+                <span class="item-id">ID Pelanggan: ${item.IDPEL || 'N/A'}</span>
             </div>
             <h3>${item.NAMA || 'Nama tidak tersedia'}</h3>
             <p>Alamat: ${item.ALAMAT || 'N/A'}</p>
-            <p>Telp: ${item.NO_TLP || 'N/A'}</p>
-            <p>Tarif/Daya: ${item.TARIF_DAYA || 'N/A'}</p>
-            <p>Merek KWH: ${item.MEREK_KWH || 'N/A'}, No. Seri: ${item.NO_SERI_KWH || 'N/A'}</p>
+            <p>ID Pekerjaan: ${item.ID_PEKERJAAN || 'N/A'}</p>
             <div class="item-actions">
-                <button class="print-button" data-id="${item.IDPEL}">Cetak Berita Acara</button>
+                <button class="print-button" data-work-id="${item.ID_PEKERJAAN}">Cetak Berita Acara</button>
             </div>
         `;
         return card;
@@ -468,10 +497,26 @@ async function handleBeritaAcaraPage() {
         loadCompletedWorks(searchParams);
     });
 
-    grid.addEventListener('click', (event) => {
+    grid.addEventListener('click', async (event) => {
         if (event.target.classList.contains('print-button')) {
-            const customerId = event.target.dataset.id;
-            alert(`Fitur cetak untuk pelanggan ID: ${customerId} belum diimplementasikan di script.js utama.`);
+            const printButton = event.target;
+            const workId = printButton.dataset.workId;
+            if (!workId) return displayMessage('ID Pekerjaan tidak ditemukan pada tombol.', 'error');
+
+            const originalText = printButton.textContent;
+            printButton.disabled = true;
+            printButton.textContent = 'Mencetak...';
+
+            const result = await callBackend('print', { workId: workId });
+            if (result.success && result.pdfData) {
+                downloadPdfFromBase64(result.pdfData.base64Data, result.pdfData.fileName);
+            } else {
+                displayMessage(result.message || 'Gagal membuat PDF.', 'error');
+                console.error('Print Error:', result);
+            }
+
+            printButton.disabled = false;
+            printButton.textContent = originalText;
         }
     });
 
@@ -548,9 +593,11 @@ async function handleIsiDataPage() {
     mainForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const formData = new FormData(mainForm);
+        // Untuk form ini, kita ubah ke object biasa karena tidak ada file upload
         const dataToSave = Object.fromEntries(formData.entries());
         
         displayMessage('Menyimpan data...', 'info');
+        // Action di backend mungkin perlu disesuaikan untuk menerima object, bukan form data
         const result = await callBackend('saveWorkExecutionData', dataToSave);
 
         if(result.success) {
@@ -562,16 +609,21 @@ async function handleIsiDataPage() {
     });
 }
 
+/**
+ * FUNGSI INI TELAH DIPERBAIKI TOTAL UNTUK MENYESUAIKAN DENGAN HTML DROPDOWN CHECKLIST
+ */
 async function handleIsiFotoPage() {
     const workId = new URLSearchParams(window.location.search).get('workId');
-    const photoForm = document.getElementById('workPhotoForm');
-    if (!workId || !photoForm) {
+    const checklistForm = document.getElementById('workChecklistForm');
+
+    if (!workId || !checklistForm) {
         document.querySelector('.container.content').innerHTML = '<p style="text-align:center;color:red;">Error: Elemen form atau Work ID tidak ditemukan.</p>';
         return;
     }
 
     document.getElementById('backToAksiLink').href = `kerjakan_pekerjaan.html?workId=${workId}`;
 
+    // 1. Mengisi info pekerjaan di bagian atas halaman
     const detailResult = await callBackend('getWorkDetail', { workId });
     if (detailResult.success && detailResult.work) {
         const work = detailResult.work;
@@ -580,36 +632,51 @@ async function handleIsiFotoPage() {
         document.getElementById('idpelDisplay').textContent = work.ID_PELANGGAN;
         document.getElementById('customerAddressDisplay').textContent = work.ALAMAT_PELANGGAN;
         
+        document.getElementById('formWorkId').value = work.ID_PEKERJAAN;
         document.getElementById('formIdpel').value = work.ID_PELANGGAN;
         document.getElementById('formNama').value = work.NAMA_PELANGGAN;
+
+        // 2. PERBAIKAN: Memuat data checklist yang sudah ada untuk dropdown
+        const photoDataResult = await callBackend('getPhotoData', { workId });
+        if (photoDataResult.success && photoDataResult.data) {
+            for (const key in photoDataResult.data) {
+                const value = photoDataResult.data[key];
+                if (value) {
+                    // Cari elemen <select> berdasarkan atribut 'name' yang sama dengan 'key'
+                    const selectElement = checklistForm.elements[key];
+                    if (selectElement) {
+                        selectElement.value = value;
+                    }
+                }
+            }
+        }
+
     } else {
-         document.querySelector('.container.content').innerHTML = `<p style="text-align:center;color:red;">Gagal memuat detail pekerjaan: ${detailResult.message}</p>`;
+        document.querySelector('.container.content').innerHTML = `<p style="text-align:center;color:red;">Gagal memuat detail pekerjaan: ${detailResult.message}</p>`;
         return;
     }
 
-    photoForm.addEventListener('submit', async (e) => {
+    // 3. PERBAIKAN: Event listener untuk submit form checklist
+    checklistForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const uploadButton = document.getElementById('uploadPhotoButton');
-        const uploadStatus = document.getElementById('uploadStatus');
-
-        const formData = new FormData(photoForm);
-        formData.append('workId', workId);
+        const submitButton = document.getElementById('submitChecklistButton');
+        const formData = new FormData(checklistForm);
         
-        uploadButton.disabled = true;
-        uploadButton.textContent = 'Mengunggah...';
-        uploadStatus.textContent = '';
+        submitButton.disabled = true;
+        submitButton.textContent = 'Menyimpan...';
 
+        // Menggunakan action 'uploadPhotos' yang sama, namun backend akan menangani data checklist
         const result = await callBackend('uploadPhotos', formData);
 
         if (result.success) {
-            displayMessage(result.message || 'Foto berhasil diunggah!', 'success');
-            photoForm.reset();
+            displayMessage(result.message || 'Checklist berhasil disimpan!', 'success');
         } else {
-            displayMessage(result.message || 'Gagal mengunggah foto.', 'error');
+            displayMessage(result.message || 'Gagal menyimpan checklist.', 'error');
         }
         
-        uploadButton.disabled = false;
-        uploadButton.textContent = 'Unggah Foto yang Dipilih';
+        submitButton.disabled = false;
+        // PERBAIKAN: Sesuaikan teks kembali ke "Simpan Data"
+        submitButton.textContent = 'Simpan Data';
     });
 }
 
@@ -622,7 +689,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const path = window.location.pathname.split('/').pop();
     switch(path) {
-        case 'login.html': handleLoginPage(); break;
+        case 'login.html':
+        case '': // Menangani root path jika ada
+             handleLoginPage(); break;
         case 'dashboard-admin.html': handleAdminDashboardPage(); break;
         case 'dashboard-user.html': handleUserDashboardPage(); break;
         case 'data_pelanggan.html': handleDataPelangganPage(); break;
@@ -633,6 +702,7 @@ document.addEventListener('DOMContentLoaded', () => {
         case 'kerjakan_pekerjaan.html': handleKerjakanPekerjaanPage(); break;
         case 'detail_pekerjaan.html': handleWorkDetailPage(); break;
         case 'isi_data_pekerjaan.html': handleIsiDataPage(); break;
+        // Pastikan nama file ini sesuai dengan file HTML checklist Anda
         case 'isi_foto_pekerjaan.html': handleIsiFotoPage(); break;
     }
 });

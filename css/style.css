@@ -150,7 +150,7 @@ body {
 .container.content {
     max-width: 1000px; 
     margin: 30px auto; 
-    padding: 0 20px; /* Padding diubah agar lebih konsisten di layar kecil */
+    padding: 0 20px;
     box-sizing: border-box;
 }
 
@@ -358,7 +358,7 @@ body {
     align-items: center;
     margin-bottom: 20px;
     width: 100%;
-    gap: 10px; /* Memberi jarak antar tombol */
+    gap: 10px;
 }
 
 .add-new-button, .back-to-dashboard-button {
@@ -443,7 +443,7 @@ body {
     display: flex;
     gap: 10px;
     margin-top: 15px;
-    justify-content: flex-end;
+    justify-content: center;
 }
 
 .action-button-25 {
@@ -489,7 +489,7 @@ body {
     background-color: #0056b3;
 }
 
-/* -------------------- Add Work Page Styles -------------------- */
+/* -------------------- Add/Edit Page Styles -------------------- */
 .add-work-card {
     background: white;
     padding: 25px; 
@@ -500,7 +500,7 @@ body {
 }
 
 .add-work-form {
-    /* No custom styles needed for now */
+    /* Styles for the form if needed */
 }
 
 .add-work-button {
@@ -510,14 +510,17 @@ body {
 
 /* -------------------- Print Button Style for Berita Acara -------------------- */
 .print-button {
-    background-color: #007bff; 
+    width: 100%;
+    max-width: 450px;
+    padding: 12px 18px;
+    font-size: 16px;
+    border-radius: 8px;
+    background-color: #007bff;
     color: white;
-    padding: 8px 15px; 
     border: none;
-    border-radius: 5px;
-    font-size: 0.9em;
-    width: auto; 
     cursor: pointer;
+    text-decoration: none;
+    text-align: center;
     transition: background-color 0.3s ease;
 }
 
@@ -525,6 +528,20 @@ body {
     background-color: #0056b3;
 }
 
+/* -------------------- Photo Upload Page Styles -------------------- */
+fieldset {
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-bottom: 25px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+legend {
+    font-weight: bold;
+    font-size: 1.1em;
+    padding: 0 10px;
+    color: #333;
+}
 
 /* -------------------- Custom Modal Styles (Tambahan) -------------------- */
 .custom-modal {
@@ -747,7 +764,7 @@ body {
         width: 100%;
         margin-top: 10px;
     }
-   
+    
     .action-bar {
         flex-direction: row; 
     }
@@ -801,8 +818,7 @@ body {
 
 
 /* =================================================================== */
-/* TAMBAHAN GAYA UNTUK STATUS DAN TOMBOL PEKERJAAN                      */
-/* (Ini adalah gaya baru yang ditambahkan)                             */
+/* TAMBAHAN GAYA UNTUK STATUS DAN TOMBOL PEKERJAAN                     */
 /* =================================================================== */
 
 .customer-maintenance-item .item-status {
@@ -881,8 +897,8 @@ body {
 
 /* Membuat kedua tombol memanjang dan ukurannya sama */
 .action-bar.top-actions .button {
-    flex-grow: 1;           /* Kunci agar tombol memanjang */
-    max-width: 400px;       /* Opsional: Batas lebar maksimum per tombol */
+    flex-grow: 1;            /* Kunci agar tombol memanjang */
+    max-width: 400px;        /* Opsional: Batas lebar maksimum per tombol */
 }
 
 /* Tombol biru untuk "Kembali" */
@@ -897,6 +913,7 @@ body {
 .action-bar .save-button {
     background-color: #28a745;
 }
-.action-bar .save-button:hover {
+.action-ar .save-button:hover {
     background-color: #218838;
 }
+
