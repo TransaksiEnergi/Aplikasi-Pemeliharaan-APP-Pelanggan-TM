@@ -5,6 +5,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Isi Data Pekerjaan - Aplikasi Pemeliharaan TM</title>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* General styling for all buttons for a consistent look */
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px; /* Rounded corners */
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow */
+        }
+
+        .button:hover {
+            opacity: 0.9;
+        }
+
+        .button:active {
+            transform: translateY(1px); /* Simple press effect */
+        }
+
+        /* Specific styles for the "Kembali" (Back) button */
+        .back-button {
+            background-color: #ffffff; /* White background */
+            color: #007bff; /* Blue text */
+            border: 1px solid #007bff; /* Blue border */
+        }
+
+        /* Specific styles for the "Simpan Data" (Save) button */
+        .save-button {
+            background-color: #28a745; /* Green background */
+            color: white; /* White text */
+        }
+        
+        /* Specific styles for the "Ambil Koordinat" (Get Coordinates) button */
+        #getGpsButton {
+            background-color: #007bff; /* Blue background */
+            color: white; /* White text */
+            width: 100%; /* Make it full width on mobile */
+        }
+
+        /* Container for inline form elements like the GPS input and button */
+        .form-group-inline {
+            display: flex;
+            flex-direction: column; /* Stack vertically on small screens */
+            align-items: stretch;
+            gap: 10px;
+        }
+        
+        .form-group-inline input {
+            flex-grow: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        /* Adjust for larger screens */
+        @media (min-width: 640px) {
+            .form-group-inline {
+                flex-direction: row; /* Side-by-side on larger screens */
+                align-items: center;
+            }
+            #getGpsButton {
+                width: auto; /* Auto width on larger screens */
+                flex-shrink: 0;
+            }
+        }
+
+        /* Action bar for top buttons */
+        .action-bar.top-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
     <header class="dashboard-header">
@@ -29,9 +108,32 @@
             <form id="workDataForm">
                 <input type="hidden" id="hiddenWorkId" name="ID_PEKERJAAN">
                 <input type="hidden" id="hiddenIdpel" name="IDPEL">
-
-                <div class="form-group"><label>Pemadaman</label><input type="text" name="Pemadaman"></div>
-                <div class="form-group"><label>Konstruksi APP</label><input type="text" name="KONSTRUKSI APP"></div>
+ 
+                <div class="form-group">
+                    <label for="tikorBaru">TIKOR BARU</label>
+                    <div class="form-group-inline">
+                        <input type="text" id="tikorBaru" name="TIKOR BARU" placeholder="Klik tombol untuk mengambil koordinat GPS" readonly>
+                        <button type="button" id="getGpsButton" class="button">Ambil Koordinat</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="pemadaman">Pemadaman</label>
+                    <select id="pemadaman" name="Pemadaman">
+                        <option value="" disabled selected>Pilih Status Pemadaman</option>
+                        <option value="PADAM">PADAM</option>
+                        <option value="TIDAK PADAM">TIDAK PADAM</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="konstruksiApp">Konstruksi APP</label>
+                    <select id="konstruksiApp" name="KONSTRUKSI APP">
+                        <option value="" disabled selected>Pilih Jenis Konstruksi</option>
+                        <option value="KUBIKEL">KUBIKEL</option>
+                        <option value="NON KUBIKEL">NON KUBIKEL</option>
+                    </select>
+                </div>
+                
                 <div class="form-group"><label>Arus Primer Fasa R (A)</label><input type="text" name="ARUS PRIMER FASA R (A)"></div>
                 <div class="form-group"><label>Arus Primer Fasa S (A)</label><input type="text" name="ARUS PRIMER FASA S (A)"></div>
                 <div class="form-group"><label>Arus Primer Fasa T (A)</label><input type="text" name="ARUS PRIMER FASA T (A)"></div>
@@ -88,21 +190,91 @@
                 <div class="form-group"><label>GFR Instant</label><input type="text" name="GFR INSTANT"></div>
                 <div class="form-group"><label>TMS GFR Instant</label><input type="text" name="TMS GFR INSTANT"></div>
                 <div class="form-group"><label>Merk PT</label><input type="text" name="MERK PT"></div>
-                <div class="form-group"><label>Rasio PT</label><input type="text" name="RASIO PT"></div>
+                
+                <div class="form-group">
+                    <label for="rasioPt">Rasio PT</label>
+                    <select id="rasioPt" name="RASIO PT">
+                        <option value="" disabled selected>Pilih Rasio PT</option>
+                        <option value="20.000 V/√3 : 100 V/√3">20.000 V/√3 : 100 V/√3</option>
+                        <option value="20.000 V/√3 : 110 V/√3">20.000 V/√3 : 110 V/√3</option>
+                    </select>
+                </div>
+
                 <div class="form-group"><label>Tipe PT</label><input type="text" name="TIPE PT"></div>
                 <div class="form-group"><label>Kondisi (Relay/Heater/Gardu/Gembok/Ventilasi/Exhaust Fan/Mainhole/Segel)</label><textarea name="KONDISI RELAY / HEATER / GARDU / GEMBOK / VENTILASI / EXHAUST FAN / MAINHOLE / SEGEL"></textarea></div>
-                <div class="form-group"><label>Kategori Pemeliharaan</label><input type="text" name="KATEGORI PEMELIHARAAN"></div>
+                
+                <div class="form-group">
+                    <label for="kategoriPemeliharaan">Kategori Pemeliharaan</label>
+                    <select id="kategoriPemeliharaan" name="KATEGORI PEMELIHARAAN">
+                        <option value="" disabled selected>Pilih Kategori</option>
+                        <option value="TERENCANA">TERENCANA</option>
+                        <option value="EMERGENCY">EMERGENCY</option>
+                    </select>
+                </div>
+
                 <div class="form-group"><label>Catatan</label><textarea name="CATATAN"></textarea></div>
-                <div class="form-group"><label>Tanggal Pemeliharaan Berikutnya</label><input type="date" name="TANGGAL PEMELIHARAAN BERIKUTNYA"></div>
+                <div class="form-group">
+                    <label>Periode Pemeliharaan Berikutnya</label>
+                    <select name="PERIODE_PEMELIHARAAN_BERIKUTNYA">
+                        <option value="" disabled selected>Pilih Periode</option>
+                        <option value="1">1 Bulan</option>
+                        <option value="3">3 Bulan</option>
+                        <option value="6">6 Bulan</option>
+                    </select>
+                </div>
                 <div class="form-group"><label>Petugas PLN</label><input type="text" name="PETUGAS PLN"></div>
                 <div class="form-group"><label>Tanggal</label><input type="date" name="TANGGAL"></div>
                 <div class="form-group"><label>Jam</label><input type="time" name="JAM"></div>
                 <div class="form-group"><label>Status</label><input type="text" name="STATUS"></div>
                 
-                </form>
-            </div>
+            </form>
+        </div>
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const getGpsButton = document.getElementById('getGpsButton');
+            const tikorBaruInput = document.getElementById('tikorBaru');
+
+            if (getGpsButton && tikorBaruInput) {
+                getGpsButton.addEventListener('click', () => {
+                    if (navigator.geolocation) {
+                        tikorBaruInput.value = "Mencari lokasi...";
+                        navigator.geolocation.getCurrentPosition(
+                            (position) => {
+                                const lat = position.coords.latitude;
+                                const lon = position.coords.longitude;
+                                tikorBaruInput.value = `${lat}, ${lon}`;
+                            },
+                            (error) => {
+                                let errorMessage = "Gagal mendapatkan lokasi: ";
+                                switch(error.code) {
+                                    case error.PERMISSION_DENIED:
+                                        errorMessage += "Izin akses lokasi ditolak.";
+                                        break;
+                                    case error.POSITION_UNAVAILABLE:
+                                        errorMessage += "Informasi lokasi tidak tersedia.";
+                                        break;
+                                    case error.TIMEOUT:
+                                        errorMessage += "Waktu permintaan lokasi habis.";
+                                        break;
+                                    case error.UNKNOWN_ERROR:
+                                        errorMessage += "Terjadi kesalahan tidak diketahui.";
+                                        break;
+                                }
+                                tikorBaruInput.value = errorMessage;
+                                console.error(errorMessage);
+                            }
+                        );
+                    } else {
+                        const errorMessage = "Geolocation tidak didukung oleh browser ini.";
+                        tikorBaruInput.value = errorMessage;
+                        console.error(errorMessage);
+                    }
+                });
+            }
+        });
+    </script>
     <script src="js/script.js"></script>
 </body>
 </html>
