@@ -3,21 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Input Foto Pekerjaan - Aplikasi Pemeliharaan TM</title>
+    <title>Isi Data Foto - Aplikasi Pemeliharaan TM</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        fieldset {
-            border: 1px solid #ddd;
-            padding: 20px;
-            margin-bottom: 25px;
-            border-radius: 8px;
-            background-color: #f9f9f9;
+        /* Style yang sudah ada */
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
         }
-        legend {
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px; /* Memberi jarak antar form group */
+        }
+        .form-group-label {
+            margin-bottom: 5px;
             font-weight: bold;
-            font-size: 1.1em;
-            padding: 0 10px;
-            color: #333;
+        }
+        .main-action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .button {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+        }
+        .button-primary {
+            background-color: #28a745;
+        }
+        .button-primary:hover {
+            background-color: #218838;
+        }
+        .button-secondary {
+            background-color: #007bff;
+        }
+        .button-secondary:hover {
+            background-color: #0056b3;
+        }
+
+        /* === CSS BARU UNTUK UPLOAD FOTO === */
+        .photo-upload-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .photo-preview {
+            width: 100px;
+            height: 100px;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background-color: #f8f9fa;
+        }
+        .photo-preview-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none; /* Sembunyikan secara default */
+        }
+        .photo-preview-text {
+            font-size: 12px;
+            color: #6c757d;
+        }
+        .photo-upload-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .button-upload {
+            background-color: #6c757d; /* Abu-abu */
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+        .button-upload:hover {
+            background-color: #5a6268;
+        }
+        .button-remove {
+            background-color: #dc3545; /* Merah */
+            padding: 8px 16px;
+            font-size: 14px;
+            display: none; /* Sembunyikan secara default */
+        }
+        .button-remove:hover {
+            background-color: #c82333;
         }
     </style>
 </head>
@@ -30,47 +112,133 @@
 
     <div class="container content">
         <div class="add-work-card">
-            <!-- Info Header (Diperbarui dengan Alamat) -->
             <div id="work-info-header" class="work-info-header">
-                <h2>Unggah Foto untuk Pekerjaan: <span id="workIdDisplay">Memuat...</span></h2>
+                <h2>Isi Data untuk Foto: <span id="workIdDisplay">Memuat...</span></h2>
                 <p><strong>Pelanggan:</strong> <span id="customerNameDisplay">Memuat...</span> (<span id="idpelDisplay">...</span>)</p>
-                <p><strong>Alamat:</strong> <span id="customerAddressDisplay">Memuat...</span></p> <!-- BARIS INI DITAMBAHKAN -->
+                <p><strong>Alamat:</strong> <span id="customerAddressDisplay">Memuat...</span></p>
             </div>
             <hr>
 
-            <!-- Form untuk Input Foto -->
-            <form id="workPhotoForm" enctype="multipart/form-data">
-                <fieldset>
-                    <legend>Unggah Foto Dokumentasi</legend>
-                    <div class="form-grid grid-col-responsive">
-                        <!-- Kolom ini akan terisi otomatis -->
-                        <div class="form-group" style="display:none;"><label>IDPEL</label><input type="text" name="IDPEL" id="formIdpel" readonly></div>
-                        <div class="form-group" style="display:none;"><label>Nama</label><input type="text" name="NAMA" id="formNama" readonly></div>
+            <form id="workChecklistForm" method="POST" enctype="multipart/form-data">
 
-                        <!-- Daftar Input Foto -->
-                        <div class="form-group"><label>Foto Hasil Ukur LBS Fasa R</label><input type="file" name="FOTO HASIL UKUR LBS FASA R" accept="image/*"></div>
-                        <div class="form-group"><label>Foto Hasil Ukur LBS Fasa S</label><input type="file" name="FOTO HASIL UKUR LBS FASA S" accept="image/*"></div>
-                        <div class="form-group"><label>Foto Hasil Ukur LBS Fasa T</label><input type="file" name="FOTO HASIL UKUR LBS FASA T" accept="image/*"></div>
-                        <div class="form-group"><label>Foto Hasil Ukur Busbar Fasa R</label><input type="file" name="FOTO HASIL UKUR BUSBAR FASA R" accept="image/*"></div>
-                        <div class="form-group"><label>Foto Hasil Ukur Busbar Fasa S</label><input type="file" name="FOTO HASIL UKUR BUSBAR FASA S" accept="image/*"></div>
-                        <div class="form-group"><label>Foto Hasil Ukur Busbar Fasa T</label><input type="file" name="FOTO HASIL UKUR BUSBAR FASA T" accept="image/*"></div>
-                        <div class="form-group"><label>Foto CT Fasa R</label><input type="file" name="FOTO CT FASA R" accept="image/*"></div>
-                        <div class="form-group"><label>Foto CT Fasa S</label><input type="file" name="FOTO CT FASA S" accept="image/*"></div>
-                        <div class="form-group"><label>Foto CT Fasa T</label><input type="file" name="FOTO CT FASA T" accept="image/*"></div>
-                        <div class="form-group"><label>Foto PT Fasa R</label><input type="file" name="FOTO PT FASA R" accept="image/*"></div>
-                        <div class="form-group"><label>Foto PT Fasa S</label><input type="file" name="FOTO PT FASA S" accept="image/*"></div>
-                        <div class="form-group"><label>Foto PT Fasa T</label><input type="file" name="FOTO PT FASA T" accept="image/*"></div>
+                <div class="main-action-buttons">
+                    <a href="#" id="backToAksiLink" class="button button-secondary">← Kembali</a>
+                    <button type="submit" class="button button-primary" id="submitChecklistButton">Simpan Data</button>
+                </div>
+
+                <input type="hidden" name="workId" id="formWorkId">
+                <input type="hidden" name="IDPEL" id="formIdpel">
+                <input type="hidden" name="NAMA" id="formNama">
+
+                <fieldset>
+                    <legend>Checklist Kelengkapan Dokumentasi Foto</legend>
+                    <div class="form-grid">
+
+                        <div class="form-group">
+                            <label class="form-group-label">Foto Hasil Ukur LBS Fasa R</label>
+                            <div class="photo-upload-container">
+                                <input type="file" name="lbsR_photo" id="lbsR_photo" class="photo-input" accept="image/*" style="display: none;">
+                                <div class="photo-preview"><img src="" class="photo-preview-img" alt="Pratinjau"><span class="photo-preview-text">Tidak ada file</span></div>
+                                <div class="photo-upload-actions"><label for="lbsR_photo" class="button button-upload">Pilih Foto</label><button type="button" class="button button-remove">Hapus</button></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-group-label">Foto Hasil Ukur LBS Fasa S</label>
+                            <div class="photo-upload-container">
+                                <input type="file" name="lbsS_photo" id="lbsS_photo" class="photo-input" accept="image/*" style="display: none;">
+                                <div class="photo-preview"><img src="" class="photo-preview-img" alt="Pratinjau"><span class="photo-preview-text">Tidak ada file</span></div>
+                                <div class="photo-upload-actions"><label for="lbsS_photo" class="button button-upload">Pilih Foto</label><button type="button" class="button button-remove">Hapus</button></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-group-label">Foto Hasil Ukur LBS Fasa T</label>
+                            <div class="photo-upload-container">
+                                <input type="file" name="lbsT_photo" id="lbsT_photo" class="photo-input" accept="image/*" style="display: none;">
+                                <div class="photo-preview"><img src="" class="photo-preview-img" alt="Pratinjau"><span class="photo-preview-text">Tidak ada file</span></div>
+                                <div class="photo-upload-actions"><label for="lbsT_photo" class="button button-upload">Pilih Foto</label><button type="button" class="button button-remove">Hapus</button></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-group-label">Foto Hasil Ukur Busbar Fasa R</label>
+                            <div class="photo-upload-container">
+                                <input type="file" name="busbarR_photo" id="busbarR_photo" class="photo-input" accept="image/*" style="display: none;">
+                                <div class="photo-preview"><img src="" class="photo-preview-img" alt="Pratinjau"><span class="photo-preview-text">Tidak ada file</span></div>
+                                <div class="photo-upload-actions"><label for="busbarR_photo" class="button button-upload">Pilih Foto</label><button type="button" class="button button-remove">Hapus</button></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-group-label">Foto Hasil Ukur Busbar Fasa S</label>
+                            <div class="photo-upload-container">
+                                <input type="file" name="busbarS_photo" id="busbarS_photo" class="photo-input" accept="image/*" style="display: none;">
+                                <div class="photo-preview"><img src="" class="photo-preview-img" alt="Pratinjau"><span class="photo-preview-text">Tidak ada file</span></div>
+                                <div class="photo-upload-actions"><label for="busbarS_photo" class="button button-upload">Pilih Foto</label><button type="button" class="button button-remove">Hapus</button></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-group-label">Foto Hasil Ukur Busbar Fasa T</label>
+                            <div class="photo-upload-container">
+                                <input type="file" name="busbarT_photo" id="busbarT_photo" class="photo-input" accept="image/*" style="display: none;">
+                                <div class="photo-preview"><img src="" class="photo-preview-img" alt="Pratinjau"><span class="photo-preview-text">Tidak ada file</span></div>
+                                <div class="photo-upload-actions"><label for="busbarT_photo" class="button button-upload">Pilih Foto</label><button type="button" class="button button-remove">Hapus</button></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-group-label">Foto CT Fasa R</label>
+                            <div class="photo-upload-container">
+                                <input type="file" name="ctR_photo" id="ctR_photo" class="photo-input" accept="image/*" style="display: none;">
+                                <div class="photo-preview"><img src="" class="photo-preview-img" alt="Pratinjau"><span class="photo-preview-text">Tidak ada file</span></div>
+                                <div class="photo-upload-actions"><label for="ctR_photo" class="button button-upload">Pilih Foto</label><button type="button" class="button button-remove">Hapus</button></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-group-label">Foto CT Fasa S</label>
+                            <div class="photo-upload-container">
+                                <input type="file" name="ctS_photo" id="ctS_photo" class="photo-input" accept="image/*" style="display: none;">
+                                <div class="photo-preview"><img src="" class="photo-preview-img" alt="Pratinjau"><span class="photo-preview-text">Tidak ada file</span></div>
+                                <div class="photo-upload-actions"><label for="ctS_photo" class="button button-upload">Pilih Foto</label><button type="button" class="button button-remove">Hapus</button></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-group-label">Foto CT Fasa T</label>
+                            <div class="photo-upload-container">
+                                <input type="file" name="ctT_photo" id="ctT_photo" class="photo-input" accept="image/*" style="display: none;">
+                                <div class="photo-preview"><img src="" class="photo-preview-img" alt="Pratinjau"><span class="photo-preview-text">Tidak ada file</span></div>
+                                <div class="photo-upload-actions"><label for="ctT_photo" class="button button-upload">Pilih Foto</label><button type="button" class="button button-remove">Hapus</button></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-group-label">Foto PT Fasa R</label>
+                            <div class="photo-upload-container">
+                                <input type="file" name="ptR_photo" id="ptR_photo" class="photo-input" accept="image/*" style="display: none;">
+                                <div class="photo-preview"><img src="" class="photo-preview-img" alt="Pratinjau"><span class="photo-preview-text">Tidak ada file</span></div>
+                                <div class="photo-upload-actions"><label for="ptR_photo" class="button button-upload">Pilih Foto</label><button type="button" class="button button-remove">Hapus</button></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-group-label">Foto PT Fasa S</label>
+                            <div class="photo-upload-container">
+                                <input type="file" name="ptS_photo" id="ptS_photo" class="photo-input" accept="image/*" style="display: none;">
+                                <div class="photo-preview"><img src="" class="photo-preview-img" alt="Pratinjau"><span class="photo-preview-text">Tidak ada file</span></div>
+                                <div class="photo-upload-actions"><label for="ptS_photo" class="button button-upload">Pilih Foto</label><button type="button" class="button button-remove">Hapus</button></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-group-label">Foto PT Fasa T</label>
+                            <div class="photo-upload-container">
+                                <input type="file" name="ptT_photo" id="ptT_photo" class="photo-input" accept="image/*" style="display: none;">
+                                <div class="photo-preview"><img src="" class="photo-preview-img" alt="Pratinjau"><span class="photo-preview-text">Tidak ada file</span></div>
+                                <div class="photo-upload-actions"><label for="ptT_photo" class="button button-upload">Pilih Foto</label><button type="button" class="button button-remove">Hapus</button></div>
+                            </div>
+                        </div>
+
                     </div>
                 </fieldset>
-                <div class="main-action-buttons">
-                    <button type="submit" class="button" id="uploadPhotoButton">Unggah Foto yang Dipilih</button>
-                </div>
-                <div id="uploadStatus" style="text-align:center; margin-top:15px; font-weight:bold;"></div>
-            </form>
+            </form> 
         </div>
-        <p class="back-link-container"><a href="#" id="backToAksiLink" class="button">Kembali ke Pilih Aksi</a></p>
     </div>
-
     <script src="js/script.js"></script>
 </body>
 </html>

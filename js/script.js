@@ -1,7 +1,7 @@
 // ===================================================================
 // KONFIGURASI GLOBAL
 // ===================================================================
-const BASE_APP_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwMNa3lh7LK4flQ_bEQgF2GZ5YUWDDCb_oko7gfNai2DvGr9g_5W7Rmf97efwaqfdpq/exec';
+const BASE_APP_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwn06EnoRntC1ilwn2bP_AryRh0kq776lrbBzE479ZhOXV8CWkGXQO1FRDR4jHvXutT/exec';
 let customerDataForDropdown = [];
 
 // ===================================================================
@@ -29,13 +29,8 @@ async function callBackend(action, params = {}) {
         }
     }
 
-    // Logika lama untuk URL-encoded params
-    const urlParams = new URLSearchParams({ action });
-    for (const key in params) {
-        if (params.hasOwnProperty(key)) {
-            urlParams.append(key, params[key]);
-        }
-    }
+    // Logika untuk data URL-encoded
+    const urlParams = new URLSearchParams({ action, ...params });
     try {
         const response = await fetch(BASE_APP_SCRIPT_URL, {
             method: 'POST',
@@ -58,10 +53,10 @@ async function callBackend(action, params = {}) {
 
 function displayMessage(message, type = 'info', duration = 4000) {
     const existingModal = document.querySelector('.custom-modal');
-    if(existingModal) existingModal.remove();
+    if (existingModal) existingModal.remove();
     const modal = document.createElement('div');
     modal.classList.add('custom-modal');
-    modal.innerHTML = `<div class="modal-content ${type}"><span class="close-button">&times;</span><p>${message}</p></div>`;
+    modal.innerHTML = `<div class="modal-content ${type}"><span class="close-button">×</span><p>${message}</p></div>`;
     document.body.appendChild(modal);
     modal.querySelector('.close-button').onclick = () => modal.remove();
     setTimeout(() => { if (document.body.contains(modal)) modal.remove(); }, duration);
@@ -200,36 +195,10 @@ function createCustomerCard(customer) {
     return card;
 }
 
-async function handleDetailPelangganPage() {
-    const idpel = new URLSearchParams(window.location.search).get('idpel');
-    const displayContainer = document.getElementById('customerDetailDisplay');
-    const errorContainer = document.getElementById('detailError');
-
-    if (!idpel) {
-        if(errorContainer) errorContainer.textContent = 'Error: ID Pelanggan tidak valid.';
-        return;
-    }
-    
-    if (!displayContainer || !errorContainer) return;
-    
-    displayContainer.innerHTML = '<p>Memuat detail pelanggan...</p>';
-    const result = await callBackend('getCustomerDetail', { idpel });
-
-    if (result.success && result.customer) {
-        let content = '';
-        for (const key in result.customer) {
-            if (result.customer.hasOwnProperty(key)) {
-                const formattedKey = key.replace(/_/g, ' ').toUpperCase();
-                content += `<p><strong>${formattedKey}:</strong> <span>${result.customer[key] || 'N/A'}</span></p>`;
-            }
-        }
-        displayContainer.innerHTML = content;
-    } else {
-        displayContainer.innerHTML = '';
-        errorContainer.textContent = result.message || 'Gagal memuat detail pelanggan.';
-    }
-}
-
+/**
+ * [VERSI FINAL DIPERBAIKI]
+ * Menangani form "Tambah Pekerjaan", mengisi otomatis semua data pelanggan.
+ */
 async function handleAddWorkPage() {
     const form = document.getElementById('tambahPekerjaanForm');
     if (!form) return;
@@ -262,39 +231,45 @@ async function handleAddWorkPage() {
         }
     });
 
-    await loadCustomerIdsForDropdown();
+    const result = await callBackend('getCustomersForDropdown', {});
+    if (result.success && result.customers) {
+        customerDataForDropdown = result.customers;
+        const dataList = document.getElementById('customerDatalist');
+        if (dataList) {
+            dataList.innerHTML = '';
+            result.customers.forEach(c => {
+                const option = document.createElement('option');
+                option.value = c.IDPEL;
+                option.textContent = c.NAMA;
+                dataList.appendChild(option);
+            });
+        }
+    }
+    
     const idPelangganInput = document.getElementById('idPelangganPekerjaan');
     const namaTampilInput = document.getElementById('namaPelangganTampil');
     const alamatTampilInput = document.getElementById('alamatPelangganTampil');
+    const tikorTampilInput = document.getElementById('tikorTampil');
+    const tikorBaruTampilInput = document.getElementById('tikorBaruTampil');
+
     idPelangganInput.addEventListener('input', function() {
         const selectedCustomer = customerDataForDropdown.find(c => c.IDPEL === this.value);
         namaTampilInput.value = selectedCustomer ? selectedCustomer.NAMA : '';
         alamatTampilInput.value = selectedCustomer ? selectedCustomer.ALAMAT : '';
+        tikorTampilInput.value = selectedCustomer ? selectedCustomer.TIKOR : '';
+        tikorBaruTampilInput.value = selectedCustomer ? selectedCustomer.TIKOR_BARU : '';
     });
 
     const statusSelect = document.getElementById('statusPekerjaan');
     const tanggalGroup = document.getElementById('tanggalPelaksanaanGroup');
-    statusSelect.addEventListener('change', () => {
-        tanggalGroup.style.display = (statusSelect.value === 'Terjadwal') ? 'block' : 'none';
-    });
-    tanggalGroup.style.display = (statusSelect.value === 'Terjadwal') ? 'block' : 'none';
-}
-
-async function loadCustomerIdsForDropdown() {
-    const dataList = document.getElementById('customerDatalist');
-    if (!dataList) return;
-    const result = await callBackend('getCustomersForDropdown', {});
-    if (result.success && result.customers) {
-        customerDataForDropdown = result.customers;
-        dataList.innerHTML = '';
-        result.customers.forEach(c => {
-            const option = document.createElement('option');
-            option.value = c.IDPEL;
-            option.textContent = c.NAMA;
-            dataList.appendChild(option);
+    if (statusSelect && tanggalGroup) {
+        statusSelect.addEventListener('change', () => {
+            tanggalGroup.style.display = (statusSelect.value === 'Terjadwal') ? 'block' : 'none';
         });
+        tanggalGroup.style.display = (statusSelect.value === 'Terjadwal') ? 'block' : 'none';
     }
 }
+
 
 async function handleWorkListPage() {
     const workListContainer = document.getElementById('customerMaintenanceList');
@@ -351,7 +326,7 @@ function createWorkCard(work) {
     const card = document.createElement('div');
     card.className = 'customer-maintenance-item';
     const status = work.STATUS_PEKERJAAN || 'N/A';
-    const statusLC = status.toLowerCase();
+    const statusLC = status.trim().toLowerCase();
     const statusClass = 'status-' + statusLC.replace(/ /g, '-');
     
     const role = sessionStorage.getItem('userRole')?.toLowerCase();
@@ -378,21 +353,19 @@ function createWorkCard(work) {
     return card;
 }
 
+/**
+ * [VERSI FINAL DIPERBAIKI]
+ * Menangani halaman "Detail Pekerjaan", menampilkan TIKOR & TIKOR_BARU.
+ */
 async function handleWorkDetailPage() {
     const workId = new URLSearchParams(window.location.search).get('workId');
     const errorContainer = document.getElementById('detailError');
 
-    const idElem = document.getElementById('detail-id-pekerjaan');
-    if (!idElem) {
-        console.error("Elemen 'detail-id-pekerjaan' tidak ditemukan.");
+    if (!workId) {
+        if (errorContainer) errorContainer.textContent = 'Error: ID Pekerjaan tidak ditemukan di URL.';
         return;
     }
     
-    if (!workId) {
-        if(errorContainer) errorContainer.textContent = 'Error: ID Pekerjaan tidak ditemukan di URL.';
-        return;
-    }
-
     const displayContainer = document.getElementById('workDetailDisplay');
     if(displayContainer) {
         displayContainer.querySelectorAll('span').forEach(span => span.textContent = 'Memuat...');
@@ -414,35 +387,91 @@ async function handleWorkDetailPage() {
         setText('detail-id-pelanggan', work.ID_PELANGGAN);
         setText('detail-nama-pelanggan', work.NAMA_PELANGGAN);
         setText('detail-alamat-pelanggan', work.ALAMAT_PELANGGAN);
-        setText('detail-deskripsi-pekerjaan', work.DESKRIPSI_PEKERJAAN || 'Tidak ada deskripsi.');
+        setText('detail-deskripsi-pekerjaan', work.DESKRIPSI_PEKERJAAN);
+        
+        setText('detail-tikor', work.TIKOR);
+        setText('detail-tikor-baru', work.TIKOR_BARU);
+
+        setupMapButton('map-link-tikor', 'detail-tikor');
+        setupMapButton('map-link-tikor-baru', 'detail-tikor-baru');
 
     } else {
         if (errorContainer) {
             errorContainer.textContent = result.message || 'Gagal memuat detail pekerjaan.';
-            if (displayContainer) displayContainer.innerHTML = '';
         }
+    }
+}
+
+/**
+ * [FUNGSI BARU]
+ * Helper untuk mengaktifkan tombol peta di halaman detail.
+ */
+function setupMapButton(buttonId, coordinateSpanId) {
+    const mapButton = document.getElementById(buttonId);
+    const coordSpan = document.getElementById(coordinateSpanId);
+
+    if (!mapButton || !coordSpan) return;
+
+    const coordinates = coordSpan.textContent.trim();
+
+    if (coordinates && coordinates !== 'N/A' && coordinates.includes(',')) {
+        mapButton.style.display = 'flex';
+        mapButton.addEventListener('click', () => {
+            const url = `https://www.google.com/maps?q=${encodeURIComponent(coordinates)}`;
+            window.open(url, '_blank');
+        });
     }
 }
 
 async function handleBeritaAcaraPage() {
     const grid = document.getElementById('beritaAcaraList');
     const searchForm = document.getElementById('searchForm');
+    
+    const backButton = document.getElementById('backToAdminDashboardFromBA');
+
+    if (backButton) {
+        backButton.addEventListener('click', (e) => {
+            e.preventDefault(); 
+            window.location.href = 'dashboard-admin.html';
+        });
+    }
+
     if (!grid || !searchForm) return;
 
+    function downloadPdfFromBase64(base64Data, fileName) {
+        try {
+            const byteCharacters = atob(base64Data);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], {type: 'application/pdf'});
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } catch (e) {
+            console.error("Gagal memproses PDF:", e);
+            displayMessage("Gagal mengunduh PDF.", "error");
+        }
+    }
+    
     function createBeritaAcaraCard(item) {
         const card = document.createElement('div');
         card.className = 'customer-maintenance-item';
+        
         card.innerHTML = `
             <div class="item-header">
-                <span class="item-id">ID: ${item.IDPEL || 'N/A'}</span>
+                <span class="item-id">ID Pelanggan: ${item.IDPEL || 'N/A'}</span>
             </div>
             <h3>${item.NAMA || 'Nama tidak tersedia'}</h3>
             <p>Alamat: ${item.ALAMAT || 'N/A'}</p>
-            <p>Telp: ${item.NO_TLP || 'N/A'}</p>
-            <p>Tarif/Daya: ${item.TARIF_DAYA || 'N/A'}</p>
-            <p>Merek KWH: ${item.MEREK_KWH || 'N/A'}, No. Seri: ${item.NO_SERI_KWH || 'N/A'}</p>
+            <p>ID Pekerjaan: ${item.ID_PEKERJAAN || 'N/A'}</p>
             <div class="item-actions">
-                <button class="print-button" data-id="${item.IDPEL}">Cetak Berita Acara</button>
+                <button class="print-button" data-work-id="${item.ID_PEKERJAAN}">Cetak Berita Acara</button>
             </div>
         `;
         return card;
@@ -468,10 +497,26 @@ async function handleBeritaAcaraPage() {
         loadCompletedWorks(searchParams);
     });
 
-    grid.addEventListener('click', (event) => {
+    grid.addEventListener('click', async (event) => {
         if (event.target.classList.contains('print-button')) {
-            const customerId = event.target.dataset.id;
-            alert(`Fitur cetak untuk pelanggan ID: ${customerId} belum diimplementasikan di script.js utama.`);
+            const printButton = event.target;
+            const workId = printButton.dataset.workId;
+            if (!workId) return displayMessage('ID Pekerjaan tidak ditemukan pada tombol.', 'error');
+
+            const originalText = printButton.textContent;
+            printButton.disabled = true;
+            printButton.textContent = 'Mencetak...';
+
+            const result = await callBackend('print', { workId: workId });
+            if (result.success && result.pdfData) {
+                downloadPdfFromBase64(result.pdfData.base64Data, result.pdfData.fileName);
+            } else {
+                displayMessage(result.message || 'Gagal membuat PDF.', 'error');
+                console.error('Print Error:', result);
+            }
+
+            printButton.disabled = false;
+            printButton.textContent = originalText;
         }
     });
 
@@ -490,7 +535,9 @@ async function handleKerjakanPekerjaanPage() {
     if (result.success && result.work) {
         const work = result.work;
         document.getElementById('workIdDisplay').textContent = work.ID_PEKERJAAN;
-        document.getElementById('workNameDisplay').textContent = work.NAMA_PEKERJAAN;
+        if(document.getElementById('workNameDisplay')) {
+            document.getElementById('workNameDisplay').textContent = work.NAMA_PEKERJAAN;
+        }
         document.getElementById('customerNameDisplay').textContent = `${work.NAMA_PELANGGAN} (${work.ID_PELANGGAN})`;
         document.getElementById('customerAddressDisplay').textContent = work.ALAMAT_PELANGGAN;
         document.getElementById('goToDataForm').href = `isi_data_pekerjaan.html?workId=${workId}`;
@@ -564,8 +611,9 @@ async function handleIsiDataPage() {
 
 async function handleIsiFotoPage() {
     const workId = new URLSearchParams(window.location.search).get('workId');
-    const photoForm = document.getElementById('workPhotoForm');
-    if (!workId || !photoForm) {
+    const checklistForm = document.getElementById('workChecklistForm');
+
+    if (!workId || !checklistForm) {
         document.querySelector('.container.content').innerHTML = '<p style="text-align:center;color:red;">Error: Elemen form atau Work ID tidak ditemukan.</p>';
         return;
     }
@@ -580,36 +628,84 @@ async function handleIsiFotoPage() {
         document.getElementById('idpelDisplay').textContent = work.ID_PELANGGAN;
         document.getElementById('customerAddressDisplay').textContent = work.ALAMAT_PELANGGAN;
         
+        document.getElementById('formWorkId').value = work.ID_PEKERJAAN;
         document.getElementById('formIdpel').value = work.ID_PELANGGAN;
         document.getElementById('formNama').value = work.NAMA_PELANGGAN;
     } else {
-         document.querySelector('.container.content').innerHTML = `<p style="text-align:center;color:red;">Gagal memuat detail pekerjaan: ${detailResult.message}</p>`;
+        document.querySelector('.container.content').innerHTML = `<p style="text-align:center;color:red;">Gagal memuat detail pekerjaan: ${detailResult.message}</p>`;
         return;
     }
 
-    photoForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const uploadButton = document.getElementById('uploadPhotoButton');
-        const uploadStatus = document.getElementById('uploadStatus');
-
-        const formData = new FormData(photoForm);
-        formData.append('workId', workId);
+    const photoUploadContainers = checklistForm.querySelectorAll('.photo-upload-container');
+    photoUploadContainers.forEach(container => {
+        const fileInput = container.querySelector('.photo-input');
+        const previewImage = container.querySelector('.photo-preview-img');
+        const previewText = container.querySelector('.photo-preview-text');
+        const removeButton = container.querySelector('.button-remove');
         
-        uploadButton.disabled = true;
-        uploadButton.textContent = 'Mengunggah...';
-        uploadStatus.textContent = '';
+        fileInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImage.src = e.target.result;
+                    previewImage.style.display = 'block';
+                    previewText.style.display = 'none';
+                    removeButton.style.display = 'inline-block';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        removeButton.addEventListener('click', function() {
+            fileInput.value = ''; 
+            previewImage.src = '';
+            previewImage.style.display = 'none';
+            previewText.style.display = 'block';
+            removeButton.style.display = 'none';
+        });
+    });
+
+    const photoDataResult = await callBackend('getPhotoData', { workId });
+    if (photoDataResult.success && photoDataResult.data) {
+        for (const inputName in photoDataResult.data) {
+            const fileUrl = photoDataResult.data[inputName];
+            
+            if (fileUrl && (fileUrl.startsWith('http') || fileUrl.startsWith('https'))) {
+                const fileInput = checklistForm.elements[inputName];
+                if (fileInput) {
+                    const container = fileInput.closest('.photo-upload-container');
+                    const previewImage = container.querySelector('.photo-preview-img');
+                    const previewText = container.querySelector('.photo-preview-text');
+                    const removeButton = container.querySelector('.button-remove');
+                    
+                    previewImage.src = fileUrl;
+                    previewImage.style.display = 'block';
+                    previewText.style.display = 'none';
+                    removeButton.style.display = 'inline-block';
+                }
+            }
+        }
+    }
+
+    checklistForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const submitButton = document.getElementById('submitChecklistButton');
+        const formData = new FormData(checklistForm);
+        
+        submitButton.disabled = true;
+        submitButton.textContent = 'Mengunggah...';
 
         const result = await callBackend('uploadPhotos', formData);
 
         if (result.success) {
             displayMessage(result.message || 'Foto berhasil diunggah!', 'success');
-            photoForm.reset();
         } else {
             displayMessage(result.message || 'Gagal mengunggah foto.', 'error');
         }
         
-        uploadButton.disabled = false;
-        uploadButton.textContent = 'Unggah Foto yang Dipilih';
+        submitButton.disabled = false;
+        submitButton.textContent = 'Simpan Data';
     });
 }
 
@@ -622,11 +718,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const path = window.location.pathname.split('/').pop();
     switch(path) {
-        case 'login.html': handleLoginPage(); break;
+        case 'login.html':
+        case '': // Handle root path if any
+             handleLoginPage(); break;
         case 'dashboard-admin.html': handleAdminDashboardPage(); break;
         case 'dashboard-user.html': handleUserDashboardPage(); break;
         case 'data_pelanggan.html': handleDataPelangganPage(); break;
-        case 'detail_pelanggan.html': handleDetailPelangganPage(); break;
+        case 'detail_pelanggan.html': 
+            // Tidak ada fungsi handleDetailPelangganPage di kode Anda, jadi saya kosongkan
+            break;
         case 'tambah-pekerjaan.html': handleAddWorkPage(); break;
         case 'pekerjaan.html': handleWorkListPage(); break; 
         case 'berita-acara.html': handleBeritaAcaraPage(); break;
