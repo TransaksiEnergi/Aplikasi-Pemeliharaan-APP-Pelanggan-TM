@@ -952,3 +952,7 @@ legend {
     pointer-events: none; /* Memastikan klik terdeteksi di tombol, bukan di ikon */
 }
 
+a.button, a.button:visited {
+    color: white !important;
+    text-decoration: none; /* Sekalian menghilangkan garis bawah */
+}
