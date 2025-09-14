@@ -8,99 +8,48 @@
     <style>
         /* Style yang sudah ada */
         select {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
+            width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;
         }
         .form-group {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 15px; /* Memberi jarak antar form group */
+            display: flex; flex-direction: column; margin-bottom: 15px;
         }
         .form-group-label {
-            margin-bottom: 5px;
-            font-weight: bold;
+            margin-bottom: 5px; font-weight: bold;
         }
         .main-action-buttons {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
+            display: flex; gap: 10px; margin-bottom: 20px;
         }
         .button {
-            padding: 10px 24px;
-            border: none;
-            border-radius: 8px;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            text-decoration: none;
-            text-align: center;
+            padding: 10px 24px; border: none; border-radius: 8px; color: white;
+            font-size: 16px; font-weight: bold; cursor: pointer; text-decoration: none; text-align: center;
         }
-        .button-primary {
-            background-color: #28a745;
-        }
-        .button-primary:hover {
-            background-color: #218838;
-        }
-        .button-secondary {
-            background-color: #007bff;
-        }
-        .button-secondary:hover {
-            background-color: #0056b3;
-        }
-
-        /* === CSS BARU UNTUK UPLOAD FOTO === */
+        .button-primary { background-color: #28a745; }
+        .button-primary:hover { background-color: #218838; }
+        .button-secondary { background-color: #007bff; }
+        .button-secondary:hover { background-color: #0056b3; }
         .photo-upload-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            display: flex; align-items: center; gap: 10px;
         }
         .photo-preview {
-            width: 100px;
-            height: 100px;
-            border: 2px dashed #ccc;
-            border-radius: 8px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            background-color: #f8f9fa;
+            width: 100px; height: 100px; border: 2px dashed #ccc; border-radius: 8px;
+            display: flex; justify-content: center; align-items: center;
+            overflow: hidden; background-color: #f8f9fa;
         }
         .photo-preview-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: none; /* Sembunyikan secara default */
+            width: 100%; height: 100%; object-fit: cover; display: none;
         }
-        .photo-preview-text {
-            font-size: 12px;
-            color: #6c757d;
-        }
+        .photo-preview-text { font-size: 12px; color: #6c757d; }
         .photo-upload-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
+            display: flex; flex-direction: column; gap: 8px;
         }
         .button-upload {
-            background-color: #6c757d; /* Abu-abu */
-            padding: 8px 16px;
-            font-size: 14px;
+            background-color: #6c757d; padding: 8px 16px; font-size: 14px;
         }
-        .button-upload:hover {
-            background-color: #5a6268;
-        }
+        .button-upload:hover { background-color: #5a6268; }
         .button-remove {
-            background-color: #dc3545; /* Merah */
-            padding: 8px 16px;
-            font-size: 14px;
-            display: none; /* Sembunyikan secara default */
+            background-color: #dc3545; padding: 8px 16px; font-size: 14px; display: none;
         }
-        .button-remove:hover {
-            background-color: #c82333;
-        }
+        .button-remove:hover { background-color: #c82333; }
     </style>
 </head>
 <body>
@@ -119,21 +68,20 @@
             </div>
             <hr>
 
-            <form id="workChecklistForm" method="POST" enctype="multipart/form-data">
-
+            <form id="workChecklistForm" method="POST">
                 <div class="main-action-buttons">
                     <a href="#" id="backToAksiLink" class="button button-secondary">← Kembali</a>
                     <button type="submit" class="button button-primary" id="submitChecklistButton">Simpan Data</button>
                 </div>
 
                 <input type="hidden" name="workId" id="formWorkId">
-                <input type="hidden" name="IDPEL" id="formIdpel">
-                <input type="hidden" name="NAMA" id="formNama">
+                <input type="hidden" name="idpel" id="formIdpel">
+                <input type="hidden" name="nama" id="formNama">
 
                 <fieldset>
-                    <legend>Checklist Kelengkapan Dokumentasi Foto</legend>
+                    <legend>Dokumentasi Foto</legend>
                     <div class="form-grid">
-
+                        
                         <div class="form-group">
                             <label class="form-group-label">Foto Hasil Ukur LBS Fasa R</label>
                             <div class="photo-upload-container">
@@ -142,6 +90,7 @@
                                 <div class="photo-upload-actions"><label for="lbsR_photo" class="button button-upload">Pilih Foto</label><button type="button" class="button button-remove">Hapus</button></div>
                             </div>
                         </div>
+
                         <div class="form-group">
                             <label class="form-group-label">Foto Hasil Ukur LBS Fasa S</label>
                             <div class="photo-upload-container">
@@ -150,6 +99,7 @@
                                 <div class="photo-upload-actions"><label for="lbsS_photo" class="button button-upload">Pilih Foto</label><button type="button" class="button button-remove">Hapus</button></div>
                             </div>
                         </div>
+                        
                         <div class="form-group">
                             <label class="form-group-label">Foto Hasil Ukur LBS Fasa T</label>
                             <div class="photo-upload-container">
@@ -167,6 +117,7 @@
                                 <div class="photo-upload-actions"><label for="busbarR_photo" class="button button-upload">Pilih Foto</label><button type="button" class="button button-remove">Hapus</button></div>
                             </div>
                         </div>
+                        
                         <div class="form-group">
                             <label class="form-group-label">Foto Hasil Ukur Busbar Fasa S</label>
                             <div class="photo-upload-container">
@@ -175,6 +126,7 @@
                                 <div class="photo-upload-actions"><label for="busbarS_photo" class="button button-upload">Pilih Foto</label><button type="button" class="button button-remove">Hapus</button></div>
                             </div>
                         </div>
+
                         <div class="form-group">
                             <label class="form-group-label">Foto Hasil Ukur Busbar Fasa T</label>
                             <div class="photo-upload-container">
@@ -183,7 +135,7 @@
                                 <div class="photo-upload-actions"><label for="busbarT_photo" class="button button-upload">Pilih Foto</label><button type="button" class="button button-remove">Hapus</button></div>
                             </div>
                         </div>
-
+                        
                         <div class="form-group">
                             <label class="form-group-label">Foto CT Fasa R</label>
                             <div class="photo-upload-container">
@@ -192,6 +144,7 @@
                                 <div class="photo-upload-actions"><label for="ctR_photo" class="button button-upload">Pilih Foto</label><button type="button" class="button button-remove">Hapus</button></div>
                             </div>
                         </div>
+                        
                         <div class="form-group">
                             <label class="form-group-label">Foto CT Fasa S</label>
                             <div class="photo-upload-container">
@@ -200,6 +153,7 @@
                                 <div class="photo-upload-actions"><label for="ctS_photo" class="button button-upload">Pilih Foto</label><button type="button" class="button button-remove">Hapus</button></div>
                             </div>
                         </div>
+                        
                         <div class="form-group">
                             <label class="form-group-label">Foto CT Fasa T</label>
                             <div class="photo-upload-container">
@@ -217,6 +171,7 @@
                                 <div class="photo-upload-actions"><label for="ptR_photo" class="button button-upload">Pilih Foto</label><button type="button" class="button button-remove">Hapus</button></div>
                             </div>
                         </div>
+
                         <div class="form-group">
                             <label class="form-group-label">Foto PT Fasa S</label>
                             <div class="photo-upload-container">
@@ -225,6 +180,7 @@
                                 <div class="photo-upload-actions"><label for="ptS_photo" class="button button-upload">Pilih Foto</label><button type="button" class="button button-remove">Hapus</button></div>
                             </div>
                         </div>
+                        
                         <div class="form-group">
                             <label class="form-group-label">Foto PT Fasa T</label>
                             <div class="photo-upload-container">

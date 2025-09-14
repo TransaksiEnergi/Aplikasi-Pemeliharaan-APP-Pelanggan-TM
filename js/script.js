@@ -8,8 +8,30 @@ let customerDataForDropdown = [];
 // FUNGSI PEMBANTU
 // ===================================================================
 
+// GANTI SELURUH FUNGSI INI DI SCRIPT.JS
 async function callBackend(action, params = {}) {
-    // Cek jika params adalah FormData, maka gunakan fetch biasa
+    // [DIPERBAIKI] Penanganan khusus untuk payload JSON dari upload foto Base64
+    if (action === 'uploadPhotosBase64') {
+        try {
+            // 'action' sekarang ditempel di URL, dan 'params' (payload) saja yang ada di body
+            const response = await fetch(BASE_APP_SCRIPT_URL + '?action=' + action, {
+                method: 'POST',
+                body: JSON.stringify(params), // Kirim HANYA payload sebagai string JSON
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            });
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Kesalahan server: ${response.status}. Detail: ${errorText}`);
+            }
+            return await response.json();
+        } catch (error) {
+            console.error(`Error memanggil backend (JSON) action ${action}:`, error);
+            displayMessage('Kesalahan koneksi saat mengunggah.', 'error');
+            return { success: false, message: 'Terjadi kesalahan saat menghubungi server.' };
+        }
+    }
+
+    // Cek jika params adalah FormData (saat ini tidak dipakai, tapi disimpan untuk masa depan)
     if (params instanceof FormData) {
         params.append('action', action);
         try {
@@ -29,7 +51,7 @@ async function callBackend(action, params = {}) {
         }
     }
 
-    // Logika untuk data URL-encoded
+    // Logika untuk data URL-encoded (untuk semua action lain, ini sudah benar)
     const urlParams = new URLSearchParams({ action, ...params });
     try {
         const response = await fetch(BASE_APP_SCRIPT_URL, {
@@ -270,6 +292,75 @@ async function handleAddWorkPage() {
     }
 }
 
+/**
+ * [VERSI FINAL DIPERBAIKI]
+ * Menangani halaman "Detail Pekerjaan", menampilkan TIKOR & TIKOR_BARU.
+ */
+async function handleWorkDetailPage() {
+    const workId = new URLSearchParams(window.location.search).get('workId');
+    const errorContainer = document.getElementById('detailError');
+
+    if (!workId) {
+        if (errorContainer) errorContainer.textContent = 'Error: ID Pekerjaan tidak ditemukan di URL.';
+        return;
+    }
+    
+    const displayContainer = document.getElementById('workDetailDisplay');
+    if(displayContainer) {
+        displayContainer.querySelectorAll('span').forEach(span => span.textContent = 'Memuat...');
+    }
+
+    const result = await callBackend('getWorkDetail', { workId });
+
+    if (result.success && result.work) {
+        const work = result.work;
+        const setText = (id, text) => {
+            const elem = document.getElementById(id);
+            if (elem) elem.textContent = text || 'N/A';
+        };
+
+        setText('detail-id-pekerjaan', work.ID_PEKERJAAN);
+        setText('detail-nama-pekerjaan', work.NAMA_PEKERJAAN);
+        setText('detail-status-pekerjaan', work.STATUS_PEKERJAAN);
+        setText('detail-tanggal-pelaksanaan', work.TANGGAL_PELAKSANAAN);
+        setText('detail-id-pelanggan', work.ID_PELANGGAN);
+        setText('detail-nama-pelanggan', work.NAMA_PELANGGAN);
+        setText('detail-alamat-pelanggan', work.ALAMAT_PELANGGAN);
+        setText('detail-deskripsi-pekerjaan', work.DESKRIPSI_PEKERJAAN);
+        
+        setText('detail-tikor', work.TIKOR);
+        setText('detail-tikor-baru', work.TIKOR_BARU);
+
+        setupMapButton('map-link-tikor', 'detail-tikor');
+        setupMapButton('map-link-tikor-baru', 'detail-tikor-baru');
+
+    } else {
+        if (errorContainer) {
+            errorContainer.textContent = result.message || 'Gagal memuat detail pekerjaan.';
+        }
+    }
+}
+
+/**
+ * [FUNGSI BARU]
+ * Helper untuk mengaktifkan tombol peta di halaman detail.
+ */
+function setupMapButton(buttonId, coordinateSpanId) {
+    const mapButton = document.getElementById(buttonId);
+    const coordSpan = document.getElementById(coordinateSpanId);
+
+    if (!mapButton || !coordSpan) return;
+
+    const coordinates = coordSpan.textContent.trim();
+
+    if (coordinates && coordinates !== 'N/A' && coordinates.includes(',')) {
+        mapButton.style.display = 'flex';
+        mapButton.addEventListener('click', () => {
+            const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(coordinates)}`;
+            window.open(url, '_blank');
+        });
+    }
+}
 
 async function handleWorkListPage() {
     const workListContainer = document.getElementById('customerMaintenanceList');
@@ -351,76 +442,6 @@ function createWorkCard(work) {
             <button class="detail-button" data-work-id="${work.ID_PEKERJAAN}">Detail</button>
         </div>`;
     return card;
-}
-
-/**
- * [VERSI FINAL DIPERBAIKI]
- * Menangani halaman "Detail Pekerjaan", menampilkan TIKOR & TIKOR_BARU.
- */
-async function handleWorkDetailPage() {
-    const workId = new URLSearchParams(window.location.search).get('workId');
-    const errorContainer = document.getElementById('detailError');
-
-    if (!workId) {
-        if (errorContainer) errorContainer.textContent = 'Error: ID Pekerjaan tidak ditemukan di URL.';
-        return;
-    }
-    
-    const displayContainer = document.getElementById('workDetailDisplay');
-    if(displayContainer) {
-        displayContainer.querySelectorAll('span').forEach(span => span.textContent = 'Memuat...');
-    }
-
-    const result = await callBackend('getWorkDetail', { workId });
-
-    if (result.success && result.work) {
-        const work = result.work;
-        const setText = (id, text) => {
-            const elem = document.getElementById(id);
-            if (elem) elem.textContent = text || 'N/A';
-        };
-
-        setText('detail-id-pekerjaan', work.ID_PEKERJAAN);
-        setText('detail-nama-pekerjaan', work.NAMA_PEKERJAAN);
-        setText('detail-status-pekerjaan', work.STATUS_PEKERJAAN);
-        setText('detail-tanggal-pelaksanaan', work.TANGGAL_PELAKSANAAN);
-        setText('detail-id-pelanggan', work.ID_PELANGGAN);
-        setText('detail-nama-pelanggan', work.NAMA_PELANGGAN);
-        setText('detail-alamat-pelanggan', work.ALAMAT_PELANGGAN);
-        setText('detail-deskripsi-pekerjaan', work.DESKRIPSI_PEKERJAAN);
-        
-        setText('detail-tikor', work.TIKOR);
-        setText('detail-tikor-baru', work.TIKOR_BARU);
-
-        setupMapButton('map-link-tikor', 'detail-tikor');
-        setupMapButton('map-link-tikor-baru', 'detail-tikor-baru');
-
-    } else {
-        if (errorContainer) {
-            errorContainer.textContent = result.message || 'Gagal memuat detail pekerjaan.';
-        }
-    }
-}
-
-/**
- * [FUNGSI BARU]
- * Helper untuk mengaktifkan tombol peta di halaman detail.
- */
-function setupMapButton(buttonId, coordinateSpanId) {
-    const mapButton = document.getElementById(buttonId);
-    const coordSpan = document.getElementById(coordinateSpanId);
-
-    if (!mapButton || !coordSpan) return;
-
-    const coordinates = coordSpan.textContent.trim();
-
-    if (coordinates && coordinates !== 'N/A' && coordinates.includes(',')) {
-        mapButton.style.display = 'flex';
-        mapButton.addEventListener('click', () => {
-            const url = `https://www.google.com/maps?q=${encodeURIComponent(coordinates)}`;
-            window.open(url, '_blank');
-        });
-    }
 }
 
 async function handleBeritaAcaraPage() {
@@ -609,6 +630,9 @@ async function handleIsiDataPage() {
     });
 }
 
+// GANTI SELURUH FUNGSI INI DI FILE script.js ANDA
+// GANTI SELURUH FUNGSI INI DI FILE script.js ANDA
+// GANTI SELURUH FUNGSI INI DI FILE script.js ANDA
 async function handleIsiFotoPage() {
     const workId = new URLSearchParams(window.location.search).get('workId');
     const checklistForm = document.getElementById('workChecklistForm');
@@ -618,8 +642,8 @@ async function handleIsiFotoPage() {
         return;
     }
 
+    // Mengisi info pekerjaan di header halaman
     document.getElementById('backToAksiLink').href = `kerjakan_pekerjaan.html?workId=${workId}`;
-
     const detailResult = await callBackend('getWorkDetail', { workId });
     if (detailResult.success && detailResult.work) {
         const work = detailResult.work;
@@ -632,10 +656,13 @@ async function handleIsiFotoPage() {
         document.getElementById('formIdpel').value = work.ID_PELANGGAN;
         document.getElementById('formNama').value = work.NAMA_PELANGGAN;
     } else {
-        document.querySelector('.container.content').innerHTML = `<p style="text-align:center;color:red;">Gagal memuat detail pekerjaan: ${detailResult.message}</p>`;
+        document.querySelector('.container.content').innerHTML = `<p style="text-align:center;color:red;">Gagal memuat detail pekerjaan.</p>`;
         return;
     }
 
+    // =================================================================
+    // === [BAGIAN PENTING] LOGIKA UNTUK PRATINJAU & HAPUS FOTO ===
+    // =================================================================
     const photoUploadContainers = checklistForm.querySelectorAll('.photo-upload-container');
     photoUploadContainers.forEach(container => {
         const fileInput = container.querySelector('.photo-input');
@@ -643,6 +670,7 @@ async function handleIsiFotoPage() {
         const previewText = container.querySelector('.photo-preview-text');
         const removeButton = container.querySelector('.button-remove');
         
+        // Event listener ini yang membuat pratinjau muncul
         fileInput.addEventListener('change', function() {
             const file = this.files[0];
             if (file) {
@@ -657,6 +685,7 @@ async function handleIsiFotoPage() {
             }
         });
 
+        // Event listener untuk tombol hapus
         removeButton.addEventListener('click', function() {
             fileInput.value = ''; 
             previewImage.src = '';
@@ -666,12 +695,12 @@ async function handleIsiFotoPage() {
         });
     });
 
+    // Menampilkan foto yang sudah ada saat halaman dimuat
     const photoDataResult = await callBackend('getPhotoData', { workId });
     if (photoDataResult.success && photoDataResult.data) {
         for (const inputName in photoDataResult.data) {
             const fileUrl = photoDataResult.data[inputName];
-            
-            if (fileUrl && (fileUrl.startsWith('http') || fileUrl.startsWith('https'))) {
+            if (fileUrl && (fileUrl.startsWith('http'))) {
                 const fileInput = checklistForm.elements[inputName];
                 if (fileInput) {
                     const container = fileInput.closest('.photo-upload-container');
@@ -687,28 +716,83 @@ async function handleIsiFotoPage() {
             }
         }
     }
-
+    
+    // Menangani event submit form dengan metode Base64
     checklistForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const submitButton = document.getElementById('submitChecklistButton');
-        const formData = new FormData(checklistForm);
-        
         submitButton.disabled = true;
-        submitButton.textContent = 'Mengunggah...';
+        submitButton.textContent = 'Memproses...';
 
-        const result = await callBackend('uploadPhotos', formData);
+        const fileInputs = checklistForm.querySelectorAll('input[type="file"]');
+        const photosToUpload = [];
+        
+        fileInputs.forEach(input => {
+            if (input.files.length > 0) {
+                photosToUpload.push({
+                    file: input.files[0],
+                    inputName: input.name
+                });
+            }
+        });
 
-        if (result.success) {
-            displayMessage(result.message || 'Foto berhasil diunggah!', 'success');
-        } else {
-            displayMessage(result.message || 'Gagal mengunggah foto.', 'error');
+        if (photosToUpload.length === 0) {
+            displayMessage('Tidak ada foto baru yang dipilih untuk diunggah.', 'info');
+            submitButton.disabled = false;
+            submitButton.textContent = 'Simpan Data';
+            return;
         }
         
-        submitButton.disabled = false;
-        submitButton.textContent = 'Simpan Data';
+        displayMessage('Mengubah file menjadi teks...', 'info');
+
+        const promises = photosToUpload.map(photoData => {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    resolve({
+                        inputName: photoData.inputName,
+                        fileData: {
+                            fileName: photoData.file.name,
+                            mimeType: photoData.file.type,
+                            data: event.target.result
+                        }
+                    });
+                };
+                reader.onerror = (error) => reject(error);
+                reader.readAsDataURL(photoData.file);
+            });
+        });
+
+        try {
+            const processedPhotos = await Promise.all(promises);
+            
+            const payload = {
+                workId: document.getElementById('formWorkId').value,
+                idpel: document.getElementById('formIdpel').value,
+                nama: document.getElementById('formNama').value,
+                photos: processedPhotos
+            };
+            
+            displayMessage('Mengunggah foto ke server...', 'info');
+            const result = await callBackend('uploadPhotosBase64', payload);
+
+            if (result.success) {
+                displayMessage(result.message || 'Foto berhasil diunggah!', 'success');
+                setTimeout(() => {
+                    window.location.href = `kerjakan_pekerjaan.html?workId=${workId}`;
+                }, 1500);
+            } else {
+                displayMessage(result.message || 'Gagal mengunggah foto.', 'error');
+                submitButton.disabled = false;
+                submitButton.textContent = 'Simpan Data';
+            }
+        } catch (error) {
+            displayMessage('Gagal memproses file di browser.', 'error');
+            submitButton.disabled = false;
+            submitButton.textContent = 'Simpan Data';
+        }
     });
 }
-
 
 // ===================================================================
 // ROUTER FRONTEND (DOMContentLoaded)
