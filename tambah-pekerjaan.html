@@ -3,8 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Pekerjaan - Aplikasi Pemeliharaan TM</title>
-    <link rel="stylesheet" href="css/style.css"> 
+    <title>Tambah Pekerjaan - Aplikasi Pemeliharaan TR</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Gaya untuk dropdown kustom */
+        .custom-dropdown-container {
+            position: relative;
+        }
+        
+        .custom-dropdown-results {
+            position: absolute;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            width: 100%;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: none;
+        }
+        
+        .dropdown-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .dropdown-item:hover {
+            background-color: #f1f1f1;
+        }
+        
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+    </style>
 </head>
 <body>
     <header class="dashboard-header">
@@ -15,57 +48,83 @@
 
     <div class="container content">
         <h2 style="text-align: center;">Tambahkan Pekerjaan Baru</h2>
-       
+        
         <div class="add-work-card">
             <div class="error-message" id="tambahPekerjaanError"></div>
             <form id="tambahPekerjaanForm" class="add-work-form">
-                <div class="form-group">
-                    <label for="idPelangganPekerjaan">ID Pelanggan:</label>
-                    <input type="text" id="idPelangganPekerjaan" name="idPelanggan" list="customerDatalist" placeholder="Ketik atau pilih ID Pelanggan..." required>
-                    <datalist id="customerDatalist">
-                        <!-- Opsi diisi oleh JavaScript -->
-                    </datalist>
+                
+                <div class="form-group custom-dropdown-container">
+                    <label for="idPelangganPekerjaan">Pilih Pelanggan:</label>
+                    <input type="text" id="idPelangganPekerjaan" name="idPelanggan" 
+                           placeholder="Ketik untuk mencari ID atau Nama Pelanggan..." 
+                           required autocomplete="off">
+                    <div id="customerDropdownResults" class="custom-dropdown-results"></div>
                 </div>
+                
                 <div class="form-group">
                     <label for="namaPelangganTampil">Nama Pelanggan:</label>
-                    <input type="text" id="namaPelangganTampil" readonly disabled placeholder="Nama akan Terisi Otomatis">
+                    <input type="text" id="namaPelangganTampil" readonly disabled 
+                           placeholder="Nama akan terisi otomatis">
                 </div>
+                
                 <div class="form-group">
                     <label for="alamatPelangganTampil">Alamat Pelanggan:</label>
-                    <textarea id="alamatPelangganTampil" rows="3" readonly disabled placeholder="Alamat akan Terisi Otomatis"></textarea>
+                    <textarea id="alamatPelangganTampil" rows="2" readonly disabled 
+                              placeholder="Alamat akan terisi otomatis"></textarea>
                 </div>
 
+                <hr style="margin-bottom: 1rem;">
+                
+                <div class="form-group">
+                    <label for="tarifTampil">Tarif:</label>
+                    <input type="text" id="tarifTampil" readonly disabled 
+                           placeholder="Data akan terisi otomatis">
+                </div>
+                
+                <div class="form-group">
+                    <label for="faktorKaliDilTampil">FAKTOR KALI DIL:</label>
+                    <input type="text" id="faktorKaliDilTampil" readonly disabled 
+                           placeholder="Data akan terisi otomatis">
+                </div>
+                
+                <div class="form-group">
+                    <label for="merekKwhTampil">Merek KWH:</label>
+                    <input type="text" id="merekKwhTampil" readonly disabled 
+                           placeholder="Data akan terisi otomatis">
+                </div>
+                
                 <div class="form-group">
                     <label for="tikorTampil">TIKOR:</label>
-                    <input type="text" id="tikorTampil" readonly disabled placeholder="TIKOR akan Terisi Otomatis">
+                    <input type="text" id="tikorTampil" readonly disabled 
+                           placeholder="TIKOR akan terisi otomatis">
                 </div>
-
-                <div class="form-group">
-                    <label for="tikorBaruTampil">TIKOR BARU:</label>
-                    <input type="text" id="tikorBaruTampil" readonly disabled placeholder="TIKOR BARU akan Terisi Otomatis">
-                </div>
+                
+                <hr style="margin-bottom: 1rem;">
 
                 <div class="form-group">
                     <label for="namaPekerjaan">Nama Pekerjaan:</label>
-                    <input type="text" id="namaPekerjaan" name="namaPekerjaan" placeholder="Contoh: Pemeliharaan Kubikel" required>
+                    <input type="text" id="namaPekerjaan" name="namaPekerjaan" 
+                           placeholder="Contoh: Pemeliharaan Kubikel" required>
                 </div>
+                
                 <div class="form-group">
                     <label for="deskripsiPekerjaan">Deskripsi Pekerjaan:</label>
-                    <textarea id="deskripsiPekerjaan" name="deskripsiPekerjaan" rows="4" placeholder="Detail pekerjaan, lokasi, dll." required></textarea>
+                    <textarea id="deskripsiPekerjaan" name="deskripsiPekerjaan" rows="3" 
+                              placeholder="Detail pekerjaan, lokasi, dll."></textarea>
                 </div>
-
-                <!-- PERUBAHAN DI SINI -->
+                
                 <div class="form-group">
                     <label for="statusPekerjaan">Status:</label>
                     <select id="statusPekerjaan" name="statusPekerjaan" required>
-                        <option value="Kirimkan">Kirimkan (Belum Dikerjakan)</option>
+                        <option value="">Pilih Status</option>
+                        <option value="Belum Dikerjakan">Belum Dikerjakan</option>
                         <option value="Terjadwal">Terjadwal</option>
                     </select>
                 </div>
                 
                 <div class="form-group" id="tanggalPelaksanaanGroup" style="display: none;">
                     <label for="tanggalPelaksanaan">Tanggal Pelaksanaan:</label>
-                    <input type="datetime-local" id="tanggalPelaksanaan" name="tanggalPelaksanaan">
+                    <input type="date" id="tanggalPelaksanaan" name="tanggalPelaksanaan">
                 </div>
                 
                 <button type="submit" class="add-work-button">Tambahkan Pekerjaan</button>
@@ -75,6 +134,6 @@
         <p class="back-link-container"><a href="dashboard-admin.html" class="button">Kembali ke Dashboard</a></p>
     </div>
 
-    <script src="js/script.js"></script> 
+    <script src="js/script.js"></script>
 </body>
 </html>

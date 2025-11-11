@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Pekerjaan - Aplikasi Pemeliharaan TM</title>
+    <title>Detail Pekerjaan - Aplikasi Pemeliharaan TR</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -18,27 +18,36 @@
         
         <div class="add-work-card">
             <div id="workDetailDisplay">
-                <!-- Data detail pekerjaan akan dimuat di sini oleh script.js -->
                 <p><strong>ID Pekerjaan:</strong> <span id="detail-id-pekerjaan">Memuat...</span></p>
                 <p><strong>Nama Pekerjaan:</strong> <span id="detail-nama-pekerjaan">Memuat...</span></p>
                 <p><strong>Status:</strong> <span id="detail-status-pekerjaan">Memuat...</span></p>
                 <p><strong>Tanggal Pelaksanaan:</strong> <span id="detail-tanggal-pelaksanaan">Memuat...</span></p>
+                
                 <hr style="margin: 15px 0;">
+
                 <p><strong>ID Pelanggan:</strong> <span id="detail-id-pelanggan">Memuat...</span></p>
                 <p><strong>Nama Pelanggan:</strong> <span id="detail-nama-pelanggan">Memuat...</span></p>
                 <p><strong>Alamat Pelanggan:</strong> <span id="detail-alamat-pelanggan">Memuat...</span></p>
                 <div class="detail-item-flex">
-        <p><strong>TIKOR:</strong> <span id="detail-tikor">Memuat...</span></p>
-        <button id="map-link-tikor" class="map-button" title="Buka di Google Maps" style="display: none;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-        </button>
-    </div>
-    <div class="detail-item-flex">
-        <p><strong>TIKOR BARU:</strong> <span id="detail-tikor-baru">Memuat...</span></p>
-        <button id="map-link-tikor-baru" class="map-button" title="Buka di Google Maps" style="display: none;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-        </button>
-    </div>
+                    <p><strong>TIKOR:</strong> <span id="detail-tikor">Memuat...</span></p>
+                    <button id="map-link-tikor" class="map-button" title="Buka di Google Maps" style="display: none;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    </button>
+                </div>
+                <div class="detail-item-flex">
+                    <p><strong>TIKOR BARU:</strong> <span id="detail-tikor-baru">Memuat...</span></p>
+                    <button id="map-link-tikor-baru" class="map-button" title="Buka di Google Maps" style="display: none;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    </button>
+                </div>
+
+                <hr style="margin: 15px 0;">
+                <h4 style="margin-top: 15px; margin-bottom: 10px;">Detail Teknis Pelanggan</h4>
+                <p><strong>Tarif:</strong> <span id="detail-tarif">Memuat...</span></p>
+                <p><strong>FAKTOR KALI DIL:</strong> <span id="detail-faktor-kali-dil">Memuat...</span></p>
+                <p><strong>Merek KWH:</strong> <span id="detail-merek-kwh">Memuat...</span></p>
+                <p><strong>Tahun Tera KWH:</strong> <span id="detail-thterakwh">Memuat...</span></p>
+
                 <hr style="margin: 15px 0;">
                 <p><strong>Deskripsi:</strong></p>
                 <p><span id="detail-deskripsi-pekerjaan" style="white-space: pre-wrap;">Memuat...</span></p>
