@@ -3,85 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Isi Data Pekerjaan - Aplikasi Pemeliharaan TM</title>
+    <title>Isi Data Pekerjaan - Aplikasi Pemeliharaan TR</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        /* General styling for all buttons for a consistent look */
+        /* Style untuk section grouping */
+        .form-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border-left: 4px solid #007bff;
+        }
+
+        .form-section h3 {
+            margin-top: 0;
+            color: #007bff;
+            border-bottom: 2px solid #dee2e6;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Action bar untuk top buttons */
+        .action-bar.top-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 15px;
+        }
+
         .button {
             display: inline-block;
             padding: 10px 20px;
             border: none;
-            border-radius: 8px; /* Rounded corners */
+            border-radius: 8px;
             font-size: 16px;
             font-weight: bold;
             text-align: center;
             text-decoration: none;
             cursor: pointer;
-            transition: background-color 0.3s, transform 0.1s;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow */
-        }
-
-        .button:hover {
-            opacity: 0.9;
-        }
-
-        .button:active {
-            transform: translateY(1px); /* Simple press effect */
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         /* Specific styles for the "Kembali" (Back) button */
         .back-button {
-            background-color: #ffffff; /* White background */
-            color: #007bff; /* Blue text */
-            border: 1px solid #007bff; /* Blue border */
+            background-color: #ffffff;
+            color: #007bff;
+            border: 1px solid #007bff;
+        }
+
+        .back-button:hover {
+            background-color: #007bff;
+            color: white;
         }
 
         /* Specific styles for the "Simpan Data" (Save) button */
         .save-button {
-            background-color: #28a745; /* Green background */
-            color: white; /* White text */
-        }
-        
-        /* Specific styles for the "Ambil Koordinat" (Get Coordinates) button */
-        #getGpsButton {
-            background-color: #007bff; /* Blue background */
-            color: white; /* White text */
-            width: 100%; /* Make it full width on mobile */
+            background-color: #28a745;
+            color: white;
         }
 
-        /* Container for inline form elements like the GPS input and button */
+        .save-button:hover {
+            background-color: #218838;
+        }
+
+        /* Style untuk required fields */
+        .required::after {
+            content: " *";
+            color: #dc3545;
+        }
+        
+        /* Style untuk field hasil perhitungan otomatis */
+        .auto-calculated {
+            background-color: #f0f2f5; 
+            border: 1px solid #e9ecef;
+            color: #495057;
+            font-weight: 500;
+        }
+
+        .auto-calculated:focus {
+            background-color: #e9ecef;
+            box-shadow: none;
+        }
+        
+        /* Style untuk Tombol GPS */
+        #getGpsButton {
+            background-color: #007bff;
+            color: white;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        #getGpsButton:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+        
         .form-group-inline {
             display: flex;
-            flex-direction: column; /* Stack vertically on small screens */
+            flex-direction: column;
             align-items: stretch;
             gap: 10px;
         }
         
         .form-group-inline input {
             flex-grow: 1;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
         }
 
-        /* Adjust for larger screens */
         @media (min-width: 640px) {
             .form-group-inline {
-                flex-direction: row; /* Side-by-side on larger screens */
+                flex-direction: row;
                 align-items: center;
             }
             #getGpsButton {
-                width: auto; /* Auto width on larger screens */
+                width: auto;
                 flex-shrink: 0;
             }
-        }
-
-        /* Action bar for top buttons */
-        .action-bar.top-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -105,176 +143,377 @@
                 <a href="#" id="backToAksiLink" class="button back-button">&larr; Kembali</a>
                 <button type="submit" form="workDataForm" class="button save-button">Simpan Data</button>
             </div>
+            
             <form id="workDataForm">
                 <input type="hidden" id="hiddenWorkId" name="ID_PEKERJAAN">
                 <input type="hidden" id="hiddenIdpel" name="IDPEL">
- 
-                <div class="form-group">
-                    <label for="tikorBaru">TIKOR BARU</label>
-                    <div class="form-group-inline">
-                        <input type="text" id="tikorBaru" name="TIKOR BARU" placeholder="Klik tombol untuk mengambil koordinat GPS" readonly>
-                        <button type="button" id="getGpsButton" class="button">Ambil Koordinat</button>
+
+                <div class="form-section">
+                    <h3>📋 Data Umum</h3>
+                    
+                    <div class="form-group">
+                        <label for="tikorBaru">TIKOR BARU (Disimpan ke Data Pelanggan)</label>
+                        <div class="form-group-inline">
+                            <input type="text" id="tikorBaru" name="TIKOR BARU" placeholder="Klik tombol untuk mengambil koordinat GPS">
+                            <button type="button" id="getGpsButton" class="button">📍 Ambil Koordinat</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pemadaman" class="required">PEMADAMAN</label>
+                        <select id="pemadaman" name="PEMADAMAN" required>
+                            <option value="" disabled selected>Pilih Status Pemadaman</option>
+                            <option value="PADAM">PADAM</option>
+                            <option value="TIDAK PADAM">TIDAK PADAM</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="konstruksiApp" class="required">KONSTRUKSI APP</label>
+                        <select id="konstruksiApp" name="KONSTRUKSI APP" required>
+                            <option value="" disabled selected>Pilih Jenis Konstruksi</option>
+                            <option value="KUBIKEL">KUBIKEL</option>
+                            <option value="NON KUBIKEL">NON KUBIKEL</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>FAKTOR KALI DIL</label>
+                        <input type="number" step="any" id="field_e" name="FAKTOR KALI DIL" placeholder="Otomatis dari data pelanggan..." class="calculation-input auto-calculated" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label>FAKTOR KALI REAL LIHAT</label>
+                        <input type="number" step="any" id="field_f" name="FAKTOR KALI REAL LIHAT" placeholder="Masukkan faktor kali real..." class="calculation-input">
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="pemadaman">Pemadaman</label>
-                    <select id="pemadaman" name="Pemadaman">
-                        <option value="" disabled selected>Pilih Status Pemadaman</option>
-                        <option value="PADAM">PADAM</option>
-                        <option value="TIDAK PADAM">TIDAK PADAM</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="konstruksiApp">Konstruksi APP</label>
-                    <select id="konstruksiApp" name="KONSTRUKSI APP">
-                        <option value="" disabled selected>Pilih Jenis Konstruksi</option>
-                        <option value="KUBIKEL">KUBIKEL</option>
-                        <option value="NON KUBIKEL">NON KUBIKEL</option>
-                    </select>
-                </div>
-                
-                <div class="form-group"><label>Arus Primer Fasa R (A)</label><input type="text" name="ARUS PRIMER FASA R (A)"></div>
-                <div class="form-group"><label>Arus Primer Fasa S (A)</label><input type="text" name="ARUS PRIMER FASA S (A)"></div>
-                <div class="form-group"><label>Arus Primer Fasa T (A)</label><input type="text" name="ARUS PRIMER FASA T (A)"></div>
-                <div class="form-group"><label>Tegangan Primer Fasa R (kV)</label><input type="text" name="TEGANGAN PRIMER FASA R (kV)"></div>
-                <div class="form-group"><label>Tegangan Primer Fasa S (kV)</label><input type="text" name="TEGANGAN PRIMER FASA S (kV)"></div>
-                <div class="form-group"><label>Tegangan Primer Fasa T (kV)</label><input type="text" name="TEGANGAN PRIMER FASA T (kV)"></div>
-                <div class="form-group"><label>Cos Phi Primer</label><input type="text" name="COS PHI PRIMER"></div>
-                <div class="form-group"><label>Arus Sekunder Fasa R (A)</label><input type="text" name="ARUS SEKUNDER FASA R (A)"></div>
-                <div class="form-group"><label>Arus Sekunder Fasa S (A)</label><input type="text" name="ARUS SEKUNDER FASA S (A)"></div>
-                <div class="form-group"><label>Arus Sekunder Fasa T (A)</label><input type="text" name="ARUS SEKUNDER FASA T (A)"></div>
-                <div class="form-group"><label>Tegangan Sekunder Fasa R (V)</label><input type="text" name="TEGANGAN SEKUNDER FASA R (V)"></div>
-                <div class="form-group"><label>Tegangan Sekunder Fasa S (V)</label><input type="text" name="TEGANGAN SEKUNDER FASA S (V)"></div>
-                <div class="form-group"><label>Tegangan Sekunder Fasa T (V)</label><input type="text" name="TEGANGAN SEKUNDER FASA T (V)"></div>
-                <div class="form-group"><label>Cos Phi Sekunder</label><input type="text" name="COS PHI SEKUNDER"></div>
-                <div class="form-group"><label>Error KWH Meter</label><input type="text" name="ERROR KWH METER"></div>
-                <div class="form-group"><label>FX CT Primer</label><input type="text" name="FX CT PRIMER"></div>
-                <div class="form-group"><label>FX CT Sekunder</label><input type="text" name="FX CT SEKUNDER"></div>
-                <div class="form-group"><label>FX PT Primer</label><input type="text" name="FX PT PRIMER"></div>
-                <div class="form-group"><label>FX PT Sekunder</label><input type="text" name="FX PT SEKUNDER"></div>
-                <div class="form-group"><label>Faktor Kali</label><input type="text" name="FAKTOR KALI"></div>
-                <div class="form-group"><label>Error CT Fasa R</label><input type="text" name="ERROR CT FASA R"></div>
-                <div class="form-group"><label>Error CT Fasa S</label><input type="text" name="ERROR CT FASA S"></div>
-                <div class="form-group"><label>Error CT Fasa T</label><input type="text" name="ERROR CT FASA T"></div>
-                <div class="form-group"><label>Rekomendasi</label><textarea name="REKOMENDASI"></textarea></div>
-                <div class="form-group"><label>Merk Kubikel</label><input type="text" name="MERK KUBIKEL"></div>
-                <div class="form-group"><label>Tipe Kubikel</label><input type="text" name="TIPE KUBIKEL"></div>
-                <div class="form-group"><label>No Seri Kubikel</label><input type="text" name="NO SERI KUBIKEL"></div>
-                <div class="form-group"><label>Tahun Kubikel</label><input type="text" name="TAHUN KUBIKEL"></div>
-                <div class="form-group"><label>Pengujian Tahanan Pentanahan</label><input type="text" name="PENGUJIAN TAHANAN PENTANAHAN"></div>
-                <div class="form-group"><label>Tahanan Isolasi CB Fasa R</label><input type="text" name="TAHANAN ISOLASI CB FASA R"></div>
-                <div class="form-group"><label>Tahanan Isolasi CB Fasa S</label><input type="text" name="TAHANAN ISOLASI CB FASA S"></div>
-                <div class="form-group"><label>Tahanan Isolasi CB Fasa T</label><input type="text" name="TAHANAN ISOLASI CB FASA T"></div>
-                <div class="form-group"><label>Tahanan Isolasi LBS Fasa R</label><input type="text" name="TAHANAN ISOLASI LBS FASA R"></div>
-                <div class="form-group"><label>Tahanan Isolasi LBS Fasa S</label><input type="text" name="TAHANAN ISOLASI LBS FASA S"></div>
-                <div class="form-group"><label>Tahanan Isolasi LBS Fasa T</label><input type="text" name="TAHANAN ISOLASI LBS FASA T"></div>
-                <div class="form-group"><label>Tahanan Isolasi Busbar Fasa R</label><input type="text" name="TAHANAN ISOLASI BUSBAR FASA R"></div>
-                <div class="form-group"><label>Tahanan Isolasi Busbar Fasa S</label><input type="text" name="TAHANAN ISOLASI BUSBAR FASA S"></div>
-                <div class="form-group"><label>Tahanan Isolasi Busbar Fasa T</label><input type="text" name="TAHANAN ISOLASI BUSBAR FASA T"></div>
-                <div class="form-group"><label>Tahanan Isolasi Busbar Fasa R-S</label><input type="text" name="TAHANAN ISOLASI BUSBAR FASA R-S"></div>
-                <div class="form-group"><label>Tahanan Isolasi Busbar Fasa R-T</label><input type="text" name="TAHANAN ISOLASI BUSBAR FASA R-T"></div>
-                <div class="form-group"><label>Tahanan Isolasi Busbar Fasa S-T</label><input type="text" name="TAHANAN ISOLASI BUSBAR FASA S-T"></div>
-                <div class="form-group"><label>CT Fasa R (Merk / Kelas / Tipe / Rasio)</label><input type="text" name="CT FASA R (MERK / KELAS / TIPE / RASIO)"></div>
-                <div class="form-group"><label>CT Fasa S (Merk / Kelas / Tipe / Rasio)</label><input type="text" name="CT FASA S (MERK / KELAS / TIPE / RASIO)"></div>
-                <div class="form-group"><label>CT Fasa T (Merk / Kelas / Tipe / Rasio)</label><input type="text" name="CT FASA T (MERK / KELAS / TIPE / RASIO)"></div>
-                <div class="form-group"><label>Merk Relay</label><input type="text" name="MERK RELAY"></div>
-                <div class="form-group"><label>Tipe Relay</label><input type="text" name="TIPE RELAY"></div>
-                <div class="form-group"><label>Rasio CT Relay</label><input type="text" name="RASIO CT RELAY"></div>
-                <div class="form-group"><label>OCR</label><input type="text" name="OCR"></div>
-                <div class="form-group"><label>TMS OCR</label><input type="text" name="TMS OCR"></div>
-                <div class="form-group"><label>OCR Instant</label><input type="text" name="OCR INSTANT"></div>
-                <div class="form-group"><label>TMS OCR Instant</label><input type="text" name="TMS OCR INSTAN"></div>
-                <div class="form-group"><label>GFR</label><input type="text" name="GFR"></div>
-                <div class="form-group"><label>TMS GFR</label><input type="text" name="TMS GRF"></div>
-                <div class="form-group"><label>GFR Instant</label><input type="text" name="GFR INSTANT"></div>
-                <div class="form-group"><label>TMS GFR Instant</label><input type="text" name="TMS GFR INSTANT"></div>
-                <div class="form-group"><label>Merk PT</label><input type="text" name="MERK PT"></div>
-                
-                <div class="form-group">
-                    <label for="rasioPt">Rasio PT</label>
-                    <select id="rasioPt" name="RASIO PT">
-                        <option value="" disabled selected>Pilih Rasio PT</option>
-                        <option value="20.000 V/√3 : 100 V/√3">20.000 V/√3 : 100 V/√3</option>
-                        <option value="20.000 V/√3 : 110 V/√3">20.000 V/√3 : 110 V/√3</option>
-                    </select>
+
+                <div class="form-section">
+                    <h3>⚡ Data Primer</h3>
+                    
+                    <div class="form-group"><label>ARUS PRIMER FASA R (A) UKUR</label><input type="number" step="any" id="field_g" name="ARUS PRIMER FASA R (A) UKUR" placeholder="0.00" class="calculation-input"></div>
+                    <div class="form-group"><label>ARUS PRIMER FASA S (A) UKUR</label><input type="number" step="any" id="field_h" name="ARUS PRIMER FASA S (A) UKUR" placeholder="0.00" class="calculation-input"></div>
+                    <div class="form-group"><label>ARUS PRIMER FASA T (A) UKUR</label><input type="number" step="any" id="field_i" name="ARUS PRIMER FASA T (A) UKUR" placeholder="0.00" class="calculation-input"></div>
+                    
+                    <div class="form-group"><label>TEGANGAN PRIMER FASA R (V) UKUR</label><input type="number" step="any" id="field_j" name="TEGANGAN PRIMER FASA R (V) UKUR" placeholder="0.00" class="calculation-input"></div>
+                    <div class="form-group"><label>TEGANGAN PRIMER FASA S (V) UKUR</label><input type="number" step="any" id="field_k" name="TEGANGAN PRIMER FASA S (V) UKUR" placeholder="0.00" class="calculation-input"></div>
+                    <div class="form-group"><label>TEGANGAN PRIMER FASA T (V) UKUR</label><input type="number" step="any" id="field_l" name="TEGANGAN PRIMER FASA T (V) UKUR" placeholder="0.00" class="calculation-input"></div>
+                    
+                    <div class="form-group"><label>COS PHI PRIMER UKUR</label><input type="number" step="any" id="field_m" name="COS PHI PRIMER UKUR" placeholder="0.000" min="0" max="1" class="calculation-input"></div>
+
+                    <div class="form-group"><label>P PRIMER R UKUR (kW)</label><input type="number" step="any" id="field_n" name="P PRIMER R UKUR" placeholder="0.00" class="calculation-input"></div>
+                    <div class="form-group"><label>P PRIMER S UKUR (kW)</label><input type="number" step="any" id="field_o" name="P PRIMER S UKUR" placeholder="0.00" class="calculation-input"></div>
+                    <div class="form-group"><label>P PRIMER T UKUR (kW)</label><input type="number" step="any" id="field_p" name="P PRIMER T UKUR" placeholder="0.00" class="calculation-input"></div>
                 </div>
 
-                <div class="form-group"><label>Tipe PT</label><input type="text" name="TIPE PT"></div>
-                <div class="form-group"><label>Kondisi (Relay/Heater/Gardu/Gembok/Ventilasi/Exhaust Fan/Mainhole/Segel)</label><textarea name="KONDISI RELAY / HEATER / GARDU / GEMBOK / VENTILASI / EXHAUST FAN / MAINHOLE / SEGEL"></textarea></div>
-                
-                <div class="form-group">
-                    <label for="kategoriPemeliharaan">Kategori Pemeliharaan</label>
-                    <select id="kategoriPemeliharaan" name="KATEGORI PEMELIHARAAN">
-                        <option value="" disabled selected>Pilih Kategori</option>
-                        <option value="TERENCANA">TERENCANA</option>
-                        <option value="EMERGENCY">EMERGENCY</option>
-                    </select>
+                <div class="form-section">
+                    <h3>🔌 Data Sekunder & KWH Meter</h3>
+                    
+                    <div class="form-group"><label>ARUS SEKUNDER FASA R (A) UKUR</label><input type="number" step="any" id="field_r" name="ARUS SEKUNDER FASA R (A) UKUR" placeholder="0.00" class="calculation-input"></div>
+                    <div class="form-group"><label>ARUS SEKUNDER FASA S (A) UKUR</label><input type="number" step="any" id="field_s" name="ARUS SEKUNDER FASA S (A) UKUR" placeholder="0.00" class="calculation-input"></div>
+                    <div class="form-group"><label>ARUS SEKUNDER FASA T (A) UKUR</label><input type="number" step="any" id="field_t" name="ARUS SEKUNDER FASA T (A) UKUR" placeholder="0.00" class="calculation-input"></div>
+
+                    <div class="form-group"><label>ARUS SEKUNDER FASA R (A) METER</label><input type="number" step="any" id="field_u" name="ARUS SEKUNDER FASA R (A) METER" placeholder="0.00" class="calculation-input"></div>
+                    <div class="form-group"><label>ARUS SEKUNDER FASA S (A) METER</label><input type="number" step="any" id="field_v" name="ARUS SEKUNDER FASA S (A) METER" placeholder="0.00" class="calculation-input"></div>
+                    <div class="form-group"><label>ARUS SEKUNDER FASA T (A) METER</label><input type="number" step="any" id="field_w" name="ARUS SEKUNDER FASA T (A) METER" placeholder="0.00" class="calculation-input"></div>
+                    
+                    <div class="form-group"><label>TEGANGAN KWH METER FASA R (V) METER</label><input type="number" step="any" id="field_x" name="TEGANGAN KWH METER FASA R (V) METER" placeholder="0.00" class="calculation-input"></div>
+                    <div class="form-group"><label>TEGANGAN KWH METER FASA S (V)</label><input type="number" step="any" id="field_y" name="TEGANGAN KWH METER FASA S (V)" placeholder="0.00" class="calculation-input"></div>
+                    <div class="form-group"><label>TEGANGAN KWH METER FASA T (V)</label><input type="number" step="any" id="field_z" name="TEGANGAN KWH METER FASA T (V)" placeholder="0.00" class="calculation-input"></div>
+                    
+                    <div class="form-group"><label>COS PHI SEKUNDER</label><input type="number" step="any" id="field_aa" name="COS PHI SEKUNDER" placeholder="0.000" min="0" max="1" class="calculation-input"></div>
                 </div>
 
-                <div class="form-group"><label>Catatan</label><textarea name="CATATAN"></textarea></div>
-                <div class="form-group">
-                    <label>Periode Pemeliharaan Berikutnya</label>
-                    <select name="PERIODE_PEMELIHARAAN_BERIKUTNYA">
-                        <option value="" disabled selected>Pilih Periode</option>
-                        <option value="1">1 Bulan</option>
-                        <option value="3">3 Bulan</option>
-                        <option value="6">6 Bulan</option>
-                    </select>
+                <div class="form-section" style="border-left-color: #28a745; background: #f0fff4;">
+                    <h3>🧮 Hasil Perhitungan Otomatis</h3>
+                    
+                    <div class="form-group"><label>P PRIMER TOTAL (kW)</label><input type="text" id="field_q" name="P PRIMER TOTAL" placeholder="Akan terisi otomatis" readonly class="auto-calculated"></div>
+                    
+                    <div class="form-group"><label>P METER R (kw)</label><input type="text" id="field_ab" name="P METER R (kw)" placeholder="Akan terisi otomatis" readonly class="auto-calculated"></div>
+                    <div class="form-group"><label>P METER S (kw)</label><input type="text" id="field_ac" name="P METER S (kw)" placeholder="Akan terisi otomatis" readonly class="auto-calculated"></div>
+                    <div class="form-group"><label>P METER T (kw)</label><input type="text" id="field_ad" name="P METER T (kw)" placeholder="Akan terisi otomatis" readonly class="auto-calculated"></div>
+                    <div class="form-group"><label>P METER T UKUR TOTAL (kW)</label><input type="text" id="field_ae" name="P METER T UKUR TOTAL" placeholder="Akan terisi otomatis" readonly class="auto-calculated"></div>
+                    
+                    <hr>
+                    
+                    <div class="form-group"><label>ERROR KWH METER R</label><input type="text" id="field_af" name="ERROR KWH METER R" placeholder="Akan terisi otomatis" readonly class="auto-calculated"></div>
+                    <div class="form-group"><label>ERROR KWH METER S</label><input type="text" id="field_ag" name="ERROR KWH METER S" placeholder="Akan terisi otomatis" readonly class="auto-calculated"></div>
+                    <div class="form-group"><label>ERROR KWH METER T</label><input type="text" id="field_ah" name="ERROR KWH METER T" placeholder="Akan terisi otomatis" readonly class="auto-calculated"></div>
+                    <div class="form-group"><label>ERROR KWH METER TOTAL</label><input type="text" id="field_ai" name="ERROR KWH METER TOTAL" placeholder="Akan terisi otomatis" readonly class="auto-calculated"></div>
+                    
+                    <hr>
+                    
+                    <div class="form-group"><label>ERROR CT FASA R</label><input type="text" id="field_aj" name="ERROR CT FASA R" placeholder="Akan terisi otomatis" readonly class="auto-calculated"></div>
+                    <div class="form-group"><label>ERROR CT FASA S</label><input type="text" id="field_ak" name="ERROR CT FASA S" placeholder="Akan terisi otomatis" readonly class="auto-calculated"></div>
+                    <div class="form-group"><label>ERROR CT FASA T</label><input type="text" id="field_al" name="ERROR CT FASA T" placeholder="Akan terisi otomatis" readonly class="auto-calculated"></div>
+                    <div class="form-group"><label>ERROR CT TOTAL</label><input type="text" id="field_am" name="ERROR CT TOTAL" placeholder="Akan terisi otomatis" readonly class="auto-calculated"></div>
+                    
+                    <hr>
+
+                    <div class="form-group">
+                        <label>CATATAN CT</label>
+                        <textarea id="field_an" name="CATATAN CT" rows="3" placeholder="Akan terisi otomatis" readonly class="auto-calculated"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>REKOMENDASI</label>
+                        <textarea id="field_ao" name="REKOMENDASI" rows="3" placeholder="Akan terisi otomatis" readonly class="auto-calculated"></textarea>
+                    </div>
                 </div>
-                <div class="form-group"><label>Petugas PLN</label><input type="text" name="PETUGAS PLN"></div>
-                <div class="form-group"><label>Tanggal</label><input type="date" name="TANGGAL"></div>
-                <div class="form-group"><label>Jam</label><input type="time" name="JAM"></div>
-                <div class="form-group"><label>Status</label><input type="text" name="STATUS"></div>
-                
+
+                <div class="form-section">
+                    <h3>📝 Data Tambahan & Administrasi</h3>
+                    
+                    <div class="form-group">
+                        <label>MERK BOX</label>
+                        <input type="text" id="field_ap" name="MERK BOX" placeholder="Merk box">
+                    </div>
+
+                    <div class="form-group">
+                        <label>NO SERI BOX</label>
+                        <input type="text" id="field_aq" name="NO SERI BOX" placeholder="Nomor seri box">
+                    </div>
+
+                    <div class="form-group">
+                        <label>TAHUN BOX</label>
+                        <input type="text" id="field_ar" name="TAHUN BOX" placeholder="Tahun box">
+                    </div>
+
+                    <div class="form-group">
+                        <label>KONDISI BOX / SEGEL / KWH</label>
+                        <textarea id="field_as" name="KONDISI BOX / SEGEL / KWH" rows="3" placeholder="Deskripsikan kondisi..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>CATATAN</label>
+                        <textarea id="field_at" name="CATATAN" rows="3" placeholder="Catatan tambahan..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="required">PETUGAS PLN</label>
+                        <input type="text" id="field_au" name="PETUGAS PLN" placeholder="Nama petugas" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="required">TANGGAL</label>
+                        <input type="date" id="field_av" name="TANGGAL" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="required">JAM</label>
+                        <input type="time" id="field_aw" name="JAM" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>KETERANGAN</label>
+                        <input type="text" id="field_ax" name="KETERANGAN" placeholder="Keterangan pekerjaan...">
+                    </div>
+                </div>
+
             </form>
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const getGpsButton = document.getElementById('getGpsButton');
-            const tikorBaruInput = document.getElementById('tikorBaru');
+   <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Set tanggal otomatis ke hari ini
+        const today = new Date().toISOString().split('T')[0];
+        const tanggalField = document.querySelector('input[name="TANGGAL"]');
+        if (tanggalField) {
+            tanggalField.value = today;
+        }
 
-            if (getGpsButton && tikorBaruInput) {
-                getGpsButton.addEventListener('click', () => {
-                    if (navigator.geolocation) {
-                        tikorBaruInput.value = "Mencari lokasi...";
-                        navigator.geolocation.getCurrentPosition(
-                            (position) => {
-                                const lat = position.coords.latitude;
-                                const lon = position.coords.longitude;
-                                tikorBaruInput.value = `${lat}, ${lon}`;
-                            },
-                            (error) => {
-                                let errorMessage = "Gagal mendapatkan lokasi: ";
-                                switch(error.code) {
-                                    case error.PERMISSION_DENIED:
-                                        errorMessage += "Izin akses lokasi ditolak.";
-                                        break;
-                                    case error.POSITION_UNAVAILABLE:
-                                        errorMessage += "Informasi lokasi tidak tersedia.";
-                                        break;
-                                    case error.TIMEOUT:
-                                        errorMessage += "Waktu permintaan lokasi habis.";
-                                        break;
-                                    case error.UNKNOWN_ERROR:
-                                        errorMessage += "Terjadi kesalahan tidak diketahui.";
-                                        break;
-                                }
-                                tikorBaruInput.value = errorMessage;
-                                console.error(errorMessage);
-                            }
-                        );
-                    } else {
-                        const errorMessage = "Geolocation tidak didukung oleh browser ini.";
-                        tikorBaruInput.value = errorMessage;
-                        console.error(errorMessage);
-                    }
-                });
+        // --- FUNGSI KALKULASI OTOMATIS ---
+        window.calculateAutoValues = function() {
+            // Helper function untuk format input - TERIMA TITIK sebagai DESIMAL
+            const getFloat = (id) => {
+                const value = document.getElementById(id).value;
+                // Langsung parse float, karena titik = desimal di JavaScript
+                return parseFloat(value) || 0;
+            };
+
+            const getString = (id) => document.getElementById(id).value || "";
+
+            const setValue = (id, value) => {
+                const el = document.getElementById(id);
+                if (el) el.value = value;
+            };
+
+            // Ambil semua nilai input
+            const G = getFloat('field_g'); // ARUS PRIMER FASA R (A) UKUR
+            const H = getFloat('field_h'); // ARUS PRIMER FASA S (A) UKUR
+            const I = getFloat('field_i'); // ARUS PRIMER FASA T (A) UKUR
+            
+            const J = getFloat('field_j'); // TEGANGAN PRIMER FASA R (V) UKUR
+            const K = getFloat('field_k'); // TEGANGAN PRIMER FASA S (V) UKUR
+            const L = getFloat('field_l'); // TEGANGAN PRIMER FASA T (V) UKUR
+            
+            const M = getFloat('field_m'); // COS PHI PRIMER UKUR
+            
+            const N = getFloat('field_n'); // P PRIMER R UKUR (kW) - INPUT
+            const O = getFloat('field_o'); // P PRIMER S UKUR (kW) - INPUT  
+            const P = getFloat('field_p'); // P PRIMER T UKUR (kW) - INPUT
+            
+            const U = getFloat('field_u'); // ARUS SEKUNDER FASA R (A) METER
+            const V = getFloat('field_v'); // ARUS SEKUNDER FASA S (A) METER
+            const W = getFloat('field_w'); // ARUS SEKUNDER FASA T (A) METER
+            const X = getFloat('field_x'); // TEGANGAN KWH METER FASA R (V) METER
+            const Y = getFloat('field_y'); // TEGANGAN KWH METER FASA S (V)
+            const Z = getFloat('field_z'); // TEGANGAN KWH METER FASA T (V)
+            const AA = getFloat('field_aa'); // COS PHI SEKUNDER
+            
+            const F = getFloat('field_f'); // FAKTOR KALI REAL LIHAT
+            const E = getFloat('field_e'); // FAKTOR KALI DIL
+            const R = getFloat('field_r'); // ARUS SEKUNDER FASA R (A) UKUR
+            const S = getFloat('field_s'); // ARUS SEKUNDER FASA S (A) UKUR
+            const T_val = getFloat('field_t'); // ARUS SEKUNDER FASA T (A) UKUR
+
+            // --- Lakukan Perhitungan ---
+            
+            // RUMUS UNTUK P METER (kW)
+            const raw_AB = (U * X * AA) / 1000;
+            const raw_AC = (V * Y * AA) / 1000;
+            const raw_AD = (W * Z * AA) / 1000;
+            
+            // RUMUS TOTAL - P PRIMER dari INPUT
+            const raw_Q = N + O + P; 
+            const raw_AE = raw_AB + raw_AC + raw_AD; 
+
+            // RUMUS ERROR KWH METER
+            let raw_AF = 0;
+            if (N !== 0) raw_AF = ((raw_AB * F) - N) / N;
+            
+            let raw_AG = 0;
+            if (O !== 0) raw_AG = ((raw_AC * F) - O) / O;
+
+            let raw_AH = 0;
+            if (P !== 0) raw_AH = ((raw_AD * F) - P) / P;
+
+            let raw_AI = 0;
+            if (raw_Q !== 0) raw_AI = ((raw_AE * F) - raw_Q) / raw_Q;
+            
+            // RUMUS ERROR CT PER FASA
+            let raw_AJ = 0;
+            if (G !== 0) raw_AJ = ((R * F) - G) / G;
+            
+            let raw_AK = 0;
+            if (H !== 0) raw_AK = ((S * F) - H) / H;
+            
+            let raw_AL = 0;
+            if (I !== 0) raw_AL = ((T_val * F) - I) / I;
+            
+            // RUMUS ERROR CT TOTAL - YANG BENAR
+            let raw_AM = 0;
+            const arusSekunderMeterTotal = U + V + W; // ARUS SEKUNDER METER TOTAL
+            const arusPrimerTotal = G + H + I; // ARUS PRIMER TOTAL
+            if (arusPrimerTotal !== 0) {
+                raw_AM = ((arusSekunderMeterTotal * F) - arusPrimerTotal) / arusPrimerTotal;
             }
+
+            // RUMUS CATATAN CT - SESUAI EXCEL =IF(F2<>E2;"CEK CT";"NORMAL")
+            let raw_AN = "NORMAL";
+            if (F !== 0 && E !== 0 && F !== E) {
+                raw_AN = "CEK CT";
+            }
+
+            // RUMUS REKOMENDASI
+            let raw_AO = "NORMAL";
+            if (raw_AM > 0.02 && raw_AI > 0.02) {
+                raw_AO = "GANTI METER DAN CT";
+            } else if (raw_AI > 0.02 && raw_AM <= 0.02) {
+                raw_AO = "GANTI METER";
+            } else if (raw_AI <= 0.02 && raw_AM > 0.02) {
+                raw_AO = "GANTI CT";
+            }
+
+            // Format output - pakai koma untuk desimal (format Indonesia)
+            const formatDecimal = (num) => {
+                if (!isFinite(num)) return "0,00000000";
+                // Format ke 8 desimal dan ganti titik dengan koma
+                return num.toFixed(8).replace(".", ",");
+            };
+            
+            // Untuk persentase, 2 digit desimal
+            const formatPercent = (num) => {
+                if (!isFinite(num)) return "0,00%";
+                return (num * 100).toFixed(2).replace(".", ",") + "%"; 
+            };
+
+            // Set nilai otomatis
+            setValue('field_q', formatDecimal(raw_Q));
+            setValue('field_ab', formatDecimal(raw_AB));
+            setValue('field_ac', formatDecimal(raw_AC));
+            setValue('field_ad', formatDecimal(raw_AD));
+            setValue('field_ae', formatDecimal(raw_AE));
+            
+            setValue('field_af', formatPercent(raw_AF));
+            setValue('field_ag', formatPercent(raw_AG));
+            setValue('field_ah', formatPercent(raw_AH));
+            setValue('field_ai', formatPercent(raw_AI));
+            setValue('field_aj', formatPercent(raw_AJ));
+            setValue('field_ak', formatPercent(raw_AK));
+            setValue('field_al', formatPercent(raw_AL));
+            setValue('field_am', formatPercent(raw_AM));
+            
+            setValue('field_an', raw_AN);
+            setValue('field_ao', raw_AO);
+        }
+        
+        // --- FUNGSI TOMBOL GPS ---
+        const getGpsButton = document.getElementById('getGpsButton');
+        const tikorBaruInput = document.getElementById('tikorBaru');
+
+        if (getGpsButton && tikorBaruInput) {
+            getGpsButton.addEventListener('click', () => {
+                if (navigator.geolocation) {
+                    getGpsButton.disabled = true;
+                    tikorBaruInput.value = "Mencari lokasi...";
+                    
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            const lat = position.coords.latitude.toFixed(6);
+                            const lon = position.coords.longitude.toFixed(6);
+                            tikorBaruInput.value = `${lat}, ${lon}`;
+                            getGpsButton.disabled = false;
+                        },
+                        (error) => {
+                            let errorMessage = "Gagal mendapatkan lokasi: ";
+                            switch(error.code) {
+                                case error.PERMISSION_DENIED:
+                                    errorMessage += "Izin akses lokasi ditolak.";
+                                    break;
+                                case error.POSITION_UNAVAILABLE:
+                                    errorMessage += "Informasi lokasi tidak tersedia.";
+                                    break;
+                                case error.TIMEOUT:
+                                    errorMessage += "Waktu permintaan lokasi habis.";
+                                    break;
+                                case error.UNKNOWN_ERROR:
+                                    errorMessage += "Terjadi kesalahan tidak diketahui.";
+                                    break;
+                            }
+                            tikorBaruInput.value = errorMessage;
+                            getGpsButton.disabled = false;
+                        }
+                    );
+                } else {
+                    tikorBaruInput.value = "Geolocation tidak didukung oleh browser ini.";
+                }
+            });
+        }
+
+        // Daftarkan event listener ke semua input kalkulasi
+        const calculationInputs = document.querySelectorAll('.calculation-input');
+        calculationInputs.forEach(input => {
+            input.addEventListener('input', calculateAutoValues);
+            input.addEventListener('change', calculateAutoValues);
         });
-    </script>
-    <script src="js/script.js"></script>
+
+        // Panggil sekali di awal untuk inisialisasi
+        calculateAutoValues();
+    });
+</script>
+    
+    <script src="js/script.js"></script> 
 </body>
 </html>
